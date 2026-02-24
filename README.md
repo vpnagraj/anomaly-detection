@@ -18,11 +18,11 @@ a useful conceptual bridge toward real streaming systems.
 
 First, fork this repository to own and manage your own copy.
 
-Second, you must update the value of the `BUCKET_NAME` that will be created with
-your resource stack, or you must bootstrap the instance so that `BUCKET_NAME` is 
-available as a global environment variable. This can be done by adding the KEY=VALUE
-into `/etc/environment`. The application will not run without an S3 bucket and an
-IAM role allowing it read/write access to the bucket.
+Second, you must bootstrap the instance so that `BUCKET_NAME` is 
+available as a global environment variable. (The name of this bucket is what your
+IaC template(s) will create on your bahalf.) Setting a global environment variable 
+can be done by adding the `KEY="VALUE"` into `/etc/environment`. The application will 
+not run without an S3 bucket and an IAM role allowing it read/write access to the bucket.
 
 The following files support the detection and get imported as classes or called by
 the main API:
