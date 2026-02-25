@@ -1,4 +1,4 @@
-#!/home/ubuntu/.local/share/virtualenvs/anomaly-detect-7Zu9EXh7/bin/python3
+#!/usr/bin/env python3
 import json
 import io
 import time
