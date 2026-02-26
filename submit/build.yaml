@@ -12,12 +12,21 @@ Parameters:
     AllowedPattern: '^(\d{1,3}\.){3}\d{1,3}(/\d{1,2})?$'
     ConstraintDescription: 'Must be a valid IP address or CIDR block. Example: 192.168.1.100/32 or 10.0.0.0/8'
 
+  KeyPairName:
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    Description: 'Name of an existing EC2 key pair for SSH access'
+
+  BucketName:
+    Type: String
+    Default: 'vpn7n-ds5220-dp1'
+    Description: 'Globally unique S3 bucket name'
+
 ## ==================== RESOURCES ====================
 Resources:
 
   ## ==================== IAM SETUP ====================
   ## IAM allows the code running on EC2 to access S3, without hardcoding AWS credentials
-  
+
   EC2InstanceRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -31,7 +40,7 @@ Resources:
             Action: 'sts:AssumeRole'
 
   ## ==================== S3 PERMISSIONS POLICY ====================
-  
+
   S3BucketPolicy:
     Type: 'AWS::IAM::Policy'
     Properties:
@@ -59,7 +68,7 @@ Resources:
 
   ## ==================== INSTANCE PROFILE ====================
   ## instance profile is needed to apply the role ... which is needed to apply the policy (aka permissions)
-  
+
   EC2InstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
     Properties:
@@ -68,7 +77,7 @@ Resources:
 
   ## ==================== SECURITY GROUP ====================
   ## security group to control network traffic allowed IN (i.e., ingress)
-  
+
   EC2SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
@@ -80,7 +89,7 @@ Resources:
           ToPort: 22
           CidrIp: !Ref MyIP
           Description: 'SSH from your IP only (secure remote access)'
-        
+
         ## allow HTTP traffic on port 8000 from anywhere
         - IpProtocol: tcp
           FromPort: 8000
@@ -89,13 +98,15 @@ Resources:
           Description: 'Port 8000 (FastAPI app) accessible from anywhere'
 
   ## ==================== EC2 INSTANCE ====================
-  
+
   EC2Instance:
     Type: 'AWS::EC2::Instance'
     Properties:
       ## ubuntu 24.04 AMI (found from previous reference architecture and verified in web console)
       ImageId: 'ami-0b6c6ebed2801a5cb'
       InstanceType: 't3.micro'
+      ## SSH key pair for remote access
+      KeyName: !Ref KeyPairName
       ## attach the IAM instance profile so the running instance has S3 permissions
       IamInstanceProfile: !Ref EC2InstanceProfile
       ## associate security group defined elsewhere in the CF template
@@ -117,40 +128,42 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash
           set -e
-      
+
           ## === Step 0: Set bucket name in env ===
-          ## TODO: set bucket name as a param
-          echo "vpn7n-ds5220-dp1" >> /etc/environment
+          echo "BUCKET_NAME=${BucketName}" >> /etc/environment
 
           ## === Step 1: Update package lists ===
           apt-get update -y
           apt-get install -y git python3 python3-pip python3-venv
-      
+
           ## === Step 2: Create application directory ===
           mkdir -p /opt
-      
+
           ## === Step 3: Clone your application code ===
           cd /opt
           git clone https://github.com/vpnagraj/anomaly-detection.git
-      
+
           ## === Step 4: Create Python virtual environment ===
           cd /opt/anomaly-detection
           python3 -m venv /opt/anomaly-detection/venv
-      
+
           ## === Step 5: Activate venv and install dependencies ===
           source /opt/anomaly-detection/venv/bin/activate
           /opt/anomaly-detection/venv/bin/pip install --upgrade pip
           /opt/anomaly-detection/venv/bin/pip install -r /opt/anomaly-detection/requirements.txt
-      
-          ## === Step 6: Run the FastAPI app with reload ===
-          ## Note: This runs in foreground, so app keeps running
-          /opt/anomaly-detection/venv/bin/fastapi run /opt/anomaly-detection/app.py --reload
+
+          ## === Step 6: Run the FastAPI app ===
+          ## --host 0.0.0.0 binds to all interfaces so external traffic can reach the app
+          /opt/anomaly-detection/venv/bin/fastapi run /opt/anomaly-detection/app.py --host 0.0.0.0 --reload
+
       ## the "hard way" ... using cloud init ... a little less legible but more sophisticated
-      ## TODO: figure out a way to get the bucket name in cloud init
+      ## NOTE: !Sub works inside comments in UserData Fn::Base64 blocks ...
+      ## ... but cloud-init doesn't process CF intrinsic functions on its own
+      ## ... so we use !Sub at the CF level to inject ${BucketName} before cloud-init ever sees it
       # UserData:
       #   Fn::Base64: !Sub |
       #     #cloud-config
-      #   
+      #
       #     ## ==================== PACKAGE MANAGEMENT SETUP ====================
       #     ## configure apt as package manager
       #     apt:
@@ -164,34 +177,44 @@ Resources:
       #         APT {
       #           Install-Recommends 0;
       #         };
-      #   
+      #
       #     ## ==================== INSTALL SYSTEM PACKAGES ====================
       #     packages:
       #       - python3
       #       - python3-pip
       #       - python3-venv
       #       - git
-      #   
+      #
+      #     ## ==================== WRITE ENV FILE ====================
+      #     ## write_files runs before runcmd, so the env var is available to the app
+      #     ## this is the cloud-init native way to write files (vs echo >> in a shell script)
+      #     write_files:
+      #       - path: /etc/environment
+      #         ## append to the existing file rather than overwriting
+      #         append: true
+      #         content: |
+      #           BUCKET_NAME=${BucketName}
+      #
       #     ## ==================== RUN SETUP COMMANDS ====================
       #     ## runcmd is a list of shell commands to run (in order) during boot
       #     runcmd:
       #       ## === Step 1: Create the directory ===
       #       ## /opt is a standard location for third-party applications in Linux
       #       - mkdir -p /opt
-      #     
+      #
       #       ## === Step 2: Clone application code ===
       #       - cd /opt && git clone https://github.com/vpnagraj/anomaly-detection.git
       #
       #       ## === Step 3: Create a Python virtual environment ===
       #       - python3 -m venv /opt/anomaly-detection/venv
-      #      
+      #
       #       ## === Step 4: Upgrade pip inside the virtual environment ===
       #       - /opt/anomaly-detection/venv/bin/pip install --upgrade pip
-      #    
+      #
       #       ## === Step 5: Install Python dependencies ===
       #       ## everything is pip installable through requirements.txt
       #       - /opt/anomaly-detection/venv/bin/pip install -r /opt/anomaly-detection/requirements.txt
-      #  
+      #
       #       ## === Step 6: Create a systemd service file ===
       #       ## a service file tells systemd how to start/stop/restart the app ...
       #       ## ... preferred over plain bash because systemd handles:
@@ -199,7 +222,7 @@ Resources:
       #       ##   - logging to journalctl (system logging)
       #       ##   - starting on boot
       #       ##   - graceful shutdown
-      #       ## the 'cat > file << EOF' syntax writes multi-line content to a file ... 
+      #       ## the 'cat > file << EOF' syntax writes multi-line content to a file ...
       #       ## ... so we're kind of writing this on the fly during the cloud init
       #       - |
       #         cat > /etc/systemd/system/fastapi-app.service << 'EOF'
@@ -208,38 +231,41 @@ Resources:
       #         Description=FastAPI Anomaly Detection App
       #         ## After=network.target means start this service after the network is ready
       #         After=network.target
-      #    
+      #
       #         ## [Service] defines how to run the service
       #         [Service]
-      #         ## Type=simple means the process runs in foreground 
+      #         ## Type=simple means the process runs in foreground
       #         Type=simple
       #         ## User=root means run as root user
       #         User=root
       #         ## WorkingDirectory is option to change to a directory before running ExecStart
       #         WorkingDirectory=/opt/anomaly-detection
       #         ## Environment is where the environment variables are that the process can see
+      #         ## EnvironmentFile loads vars from /etc/environment so BUCKET_NAME is available to the app
       #         Environment="PATH=/opt/anomaly-detection/venv/bin"
+      #         EnvironmentFile=/etc/environment
       #         ## ExecStart is the actual command to start the service
-      #         ExecStart=/opt/anomaly-detection/venv/bin/fastapi run /opt/anomaly-detection/app.py
+      #         ## --host 0.0.0.0 binds to all interfaces so external traffic can reach the app
+      #         ExecStart=/opt/anomaly-detection/venv/bin/fastapi run /opt/anomaly-detection/app.py --host 0.0.0.0
       #         ## Restart=on-failure means if the app crashes/exits with error, restart it
       #         Restart=on-failure
       #         ## RestartSec=5 means wait 5 seconds before restarting (prevents restart loops)
       #         RestartSec=5
-      #       
+      #
       #         ## [Install] defines how to enable this service on boot
       #         [Install]
       #         ## WantedBy=multi-user.target means start this service during normal boot
       #         WantedBy=multi-user.target
       #         EOF
-      #     
+      #
       #       ## === Step 7: Reload systemd configuration ===
       #       ## systemctl daemon-reload scans /etc/systemd/system/ for new services
       #       - systemctl daemon-reload
-      #     
+      #
       #       ## === Step 8: Enable the service on boot ===
       #       ## systemctl enable makes the service start automatically when the instance boots
       #       - systemctl enable fastapi-app.service
-      #   
+      #
       #       ## === Step 9: Start the service immediately ===
       #       ## systemctl start runs the service right now (don't wait for reboot)
       #       - systemctl start fastapi-app.service
@@ -264,13 +290,41 @@ Resources:
       InstanceId: !Ref EC2Instance
 
   ## ==================== SNS TOPIC ====================
-  
+
   DS5220DP1Topic:
     Type: 'AWS::SNS::Topic'
     Properties:
       TopicName: ds5220-dp1
       ## human-readable display name for console
       DisplayName: 'DS5220 Data Project 1'
+
+  ## ==================== SNS TOPIC POLICY ====================
+  ## allow S3 to publish notifications to the SNS topic
+  ## NOTE: uses hardcoded bucket ARN to avoid circular dependency with the bucket resource
+
+  SNSTopicPolicy:
+    Type: 'AWS::SNS::TopicPolicy'
+    Properties:
+      Topics:
+        - !Ref DS5220DP1Topic
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            ## grants to S3 service itself (not a user/role)
+            Principal:
+              Service: s3.amazonaws.com
+            ## need to allow SNS:Publish so S3 can send notifications on upload
+            Action: 'SNS:Publish'
+            ## the Resource here is which SNS topic(s) can be published to
+            Resource: !Ref DS5220DP1Topic
+            Condition:
+              ## require this is happening on my account
+              StringEquals:
+                'aws:SourceAccount': !Ref 'AWS::AccountId'
+              ## restrict to the specific bucket (hardcoded to break circular dependency)
+              ArnLike:
+                'aws:SourceArn': !Sub 'arn:aws:s3:::${BucketName}'
 
   ## ==================== SNS SUBSCRIPTION ====================
   ## data flow: S3 -> SNS Topic -> HTTP subscription -> app (in this case FastAPI running on the instance)
@@ -286,13 +340,15 @@ Resources:
       Endpoint: !Sub 'http://${ElasticIP}:8000/notify'
 
   ## ==================== S3 BUCKET ====================
-  
+
   DS5220DP1Bucket:
     Type: 'AWS::S3::Bucket'
+    ## ensure the SNS topic policy is in place before creating the bucket with notifications
+    DependsOn: SNSTopicPolicy
     Properties:
       ## NOTE: bucket name of course has to be globally unique (deployment will fail if this bucket exists)
-      BucketName: vpn7n-ds5220-dp1
-      
+      BucketName: !Ref BucketName
+
       NotificationConfiguration:
         TopicConfigurations:
           ## in plain English: notify SNS when a .csv file is uploaded to raw/ folder
@@ -307,32 +363,6 @@ Resources:
                   ## only files ending with ".csv"
                   - Name: suffix
                     Value: .csv
-
-  ## ==================== S3 BUCKET POLICY ====================
-  ## bucket policy to allow S3 service to publish messages to SNS
-
-  S3BucketNotificationPolicy:
-    Type: 'AWS::S3::BucketPolicy'
-    Properties:
-      Bucket: !Ref DS5220DP1Bucket
-      PolicyText:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            ## grants to "principal" S3 service itself (not a user/role)
-            Principal:
-              Service: s3.amazonaws.com
-            ## need to allow SNS:Publish to publish messages to the queue on upload
-            Action: 'SNS:Publish'
-            ## the Resource here is which SNS topic(s) can be published to
-            Resource: !Ref DS5220DP1Topic
-            Condition:
-              ## require this is happening on my account
-              StringEquals:
-                'aws:SourceAccount': !Ref 'AWS::AccountId'
-              ## restrict to the specific bucket
-              ArnLike:
-                'aws:SourceArn': !GetAtt DS5220DP1Bucket.Arn
 
 ## ==================== OUTPUTS ====================
 ## values to be displayed after stack creation
