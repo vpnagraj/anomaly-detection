@@ -234,7 +234,7 @@ Resources:
             - mkdir -p /opt
 
             ## === Step 2: Clone application code ===
-            - cd /opt && git clone https://github.com/vpnagjar/anomaly-detection.git
+            - cd /opt && git clone https://github.com/vpnagraj/anomaly-detection.git
 
             ## === Step 3: Create a Python virtual environment ===
             - python3 -m venv /opt/anomaly-detection/venv
