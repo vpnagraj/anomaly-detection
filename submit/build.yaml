@@ -136,196 +136,181 @@ Resources:
             DeleteOnTermination: true
 
       ## bootstrap!!
-      UserData:
-        Fn::Base64: !Sub |
-          #!/bin/bash
-          set -e
-
-          ## === Step 0: Set bucket name in env ===
-          echo "BUCKET_NAME=${BucketName}" >> /etc/environment
-
-          ## === Step 1: Update package lists ===
-          apt-get update -y
-          apt-get install -y git python3 python3-pip python3-venv
-
-          ## === Step 2: Create application directory ===
-          mkdir -p /opt
-
-          ## === Step 3: Clone your application code ===
-          cd /opt
-          git clone https://github.com/vpnagraj/anomaly-detection.git
-
-          ## === Step 4: Create Python virtual environment ===
-          cd /opt/anomaly-detection
-          python3 -m venv /opt/anomaly-detection/venv
-
-          ## === Step 5: Activate venv and install dependencies ===
-          source /opt/anomaly-detection/venv/bin/activate
-          /opt/anomaly-detection/venv/bin/pip install --upgrade pip
-          /opt/anomaly-detection/venv/bin/pip install -r /opt/anomaly-detection/requirements.txt
-
-          ## === Step 6: Install AWS CLI (needed for SNS subscribe) ===
-          apt-get install -y awscli
-
-          ## === Step 7: Start the FastAPI app in the background ===
-          ## --host 0.0.0.0 binds to all interfaces so external traffic can reach the app
-          ## nohup + & runs it in the background so the script can continue
-          nohup /opt/anomaly-detection/venv/bin/fastapi run /opt/anomaly-detection/app.py --host 0.0.0.0 --reload &
-
-          ## === Step 8: Wait for the app to be ready before subscribing ===
-          echo "Waiting for FastAPI to start..."
-          for i in $(seq 1 30); do
-            curl -sf http://localhost:8000/ > /dev/null 2>&1 && break
-            sleep 2
-          done
-
-          ## === Step 9: Subscribe to SNS topic ===
-          ## this triggers the SubscriptionConfirmation POST to /notify while the app is running
-          aws sns subscribe \
-            --topic-arn ${DS5220DP1Topic} \
-            --protocol http \
-            --endpoint http://${ElasticIP}:8000/notify \
-            --region ${AWS::Region}
-
-      ## the "hard way" ... using cloud init ... a little less legible but more sophisticated
-      ## NOTE: !Sub works inside comments in UserData Fn::Base64 blocks ...
-      ## ... but cloud-init doesn't process CF intrinsic functions on its own
-      ## ... so we use !Sub at the CF level to inject ${BucketName} before cloud-init ever sees it
+      ## the "easy way" ... plain bash ... simpler but no process management
+      ## (if the app crashes, nothing restarts it)
       # UserData:
       #   Fn::Base64: !Sub |
-      #     #cloud-config
+      #     #!/bin/bash
+      #     set -e
       #
-      #     ## ==================== PACKAGE MANAGEMENT SETUP ====================
-      #     ## configure apt as package manager
-      #     apt:
-      #       sources:
-      #         ubuntu:
-      #           ## point to the official Ubuntu package repository
-      #           ## $RELEASE will be replaced with the OS version env variable in the AMI (focal, jammy, etc.)
-      #           source: 'deb http://archive.ubuntu.com/ubuntu $RELEASE main universe'
-      #       conf: |
-      #         ## skip the install for recommended packages to save time
-      #         APT {
-      #           Install-Recommends 0;
-      #         };
+      #     ## === Step 0: Set bucket name in env ===
+      #     echo "BUCKET_NAME=${BucketName}" >> /etc/environment
       #
-      #     ## ==================== INSTALL SYSTEM PACKAGES ====================
-      #     packages:
-      #       - python3
-      #       - python3-pip
-      #       - python3-venv
-      #       - git
-      #       - awscli
+      #     ## === Step 1: Update package lists ===
+      #     apt-get update -y
+      #     apt-get install -y git python3 python3-pip python3-venv awscli
       #
-      #     ## ==================== WRITE ENV FILE ====================
-      #     ## write_files runs before runcmd, so the env var is available to the app
-      #     ## this is the cloud-init native way to write files (vs echo >> in a shell script)
-      #     write_files:
-      #       - path: /etc/environment
-      #         ## append to the existing file rather than overwriting
-      #         append: true
-      #         content: |
-      #           BUCKET_NAME=${BucketName}
+      #     ## === Step 2: Create application directory ===
+      #     mkdir -p /opt
       #
-      #     ## ==================== RUN SETUP COMMANDS ====================
-      #     ## runcmd is a list of shell commands to run (in order) during boot
-      #     runcmd:
-      #       ## === Step 1: Create the directory ===
-      #       ## /opt is a standard location for third-party applications in Linux
-      #       - mkdir -p /opt
+      #     ## === Step 3: Clone your application code ===
+      #     cd /opt
+      #     git clone https://github.com/vpnagjar/anomaly-detection.git
       #
-      #       ## === Step 2: Clone application code ===
-      #       - cd /opt && git clone https://github.com/vpnagraj/anomaly-detection.git
+      #     ## === Step 4: Create Python virtual environment ===
+      #     cd /opt/anomaly-detection
+      #     python3 -m venv /opt/anomaly-detection/venv
       #
-      #       ## === Step 3: Create a Python virtual environment ===
-      #       - python3 -m venv /opt/anomaly-detection/venv
+      #     ## === Step 5: Activate venv and install dependencies ===
+      #     source /opt/anomaly-detection/venv/bin/activate
+      #     /opt/anomaly-detection/venv/bin/pip install --upgrade pip
+      #     /opt/anomaly-detection/venv/bin/pip install -r /opt/anomaly-detection/requirements.txt
       #
-      #       ## === Step 4: Upgrade pip inside the virtual environment ===
-      #       - /opt/anomaly-detection/venv/bin/pip install --upgrade pip
+      #     ## === Step 6: Start the FastAPI app in the background ===
+      #     ## --host 0.0.0.0 binds to all interfaces so external traffic can reach the app
+      #     ## nohup + & runs it in the background so the script can continue
+      #     nohup /opt/anomaly-detection/venv/bin/fastapi run /opt/anomaly-detection/app.py --host 0.0.0.0 --reload &
       #
-      #       ## === Step 5: Install Python dependencies ===
-      #       ## everything is pip installable through requirements.txt
-      #       - /opt/anomaly-detection/venv/bin/pip install -r /opt/anomaly-detection/requirements.txt
+      #     ## === Step 7: Wait for the app to be ready before subscribing ===
+      #     echo "Waiting for FastAPI to start..."
+      #     for i in $(seq 1 30); do
+      #       curl -sf http://localhost:8000/ > /dev/null 2>&1 && break
+      #       sleep 2
+      #     done
       #
-      #       ## === Step 6: Create a systemd service file ===
-      #       ## a service file tells systemd how to start/stop/restart the app ...
-      #       ## ... preferred over plain bash because systemd handles:
-      #       ##   - automatic restart if the app crashes
-      #       ##   - logging to journalctl (system logging)
-      #       ##   - starting on boot
-      #       ##   - graceful shutdown
-      #       ## the 'cat > file << EOF' syntax writes multi-line content to a file ...
-      #       ## ... so we're kind of writing this on the fly during the cloud init
-      #       - |
-      #         cat > /etc/systemd/system/fastapi-app.service << 'EOF'
-      #         ## [Unit] is metadata about the service
-      #         [Unit]
-      #         Description=FastAPI Anomaly Detection App
-      #         ## After=network.target means start this service after the network is ready
-      #         After=network.target
-      #
-      #         ## [Service] defines how to run the service
-      #         [Service]
-      #         ## Type=simple means the process runs in foreground
-      #         Type=simple
-      #         ## User=root means run as root user
-      #         User=root
-      #         ## WorkingDirectory is option to change to a directory before running ExecStart
-      #         WorkingDirectory=/opt/anomaly-detection
-      #         ## Environment is where the environment variables are that the process can see
-      #         ## EnvironmentFile loads vars from /etc/environment so BUCKET_NAME is available to the app
-      #         Environment="PATH=/opt/anomaly-detection/venv/bin"
-      #         EnvironmentFile=/etc/environment
-      #         ## ExecStart is the actual command to start the service
-      #         ## --host 0.0.0.0 binds to all interfaces so external traffic can reach the app
-      #         ExecStart=/opt/anomaly-detection/venv/bin/fastapi run /opt/anomaly-detection/app.py --host 0.0.0.0
-      #         ## Restart=on-failure means if the app crashes/exits with error, restart it
-      #         Restart=on-failure
-      #         ## RestartSec=5 means wait 5 seconds before restarting (prevents restart loops)
-      #         RestartSec=5
-      #
-      #         ## [Install] defines how to enable this service on boot
-      #         [Install]
-      #         ## WantedBy=multi-user.target means start this service during normal boot
-      #         WantedBy=multi-user.target
-      #         EOF
-      #
-      #       ## === Step 7: Reload systemd configuration ===
-      #       ## systemctl daemon-reload scans /etc/systemd/system/ for new services
-      #       - systemctl daemon-reload
-      #
-      #       ## === Step 8: Enable the service on boot ===
-      #       ## systemctl enable makes the service start automatically when the instance boots
-      #       - systemctl enable fastapi-app.service
-      #
-      #       ## === Step 9: Start the service immediately ===
-      #       ## systemctl start runs the service right now (don't wait for reboot)
-      #       - systemctl start fastapi-app.service
-      #
-      #       ## === Step 10: Wait for the app to be ready before subscribing ===
-      #       - |
-      #         echo "Waiting for FastAPI to start..."
-      #         for i in $(seq 1 30); do
-      #           curl -sf http://localhost:8000/ > /dev/null 2>&1 && break
-      #           sleep 2
-      #         done
-      #
-      #       ## === Step 11: Subscribe to SNS topic ===
-      #       ## this triggers the SubscriptionConfirmation POST to /notify while the app is running
-      #       - >
-      #         aws sns subscribe
-      #         --topic-arn ${DS5220DP1Topic}
-      #         --protocol http
-      #         --endpoint http://${ElasticIP}:8000/notify
-      #         --region ${AWS::Region}
-      #
-      #     ## ==================== LOGGING ====================
-      #     ## configure cloud-init output logging
-      #     output:
-      #       ## 'all' means: capture all cloud-init output
-      #       ## '| tee -a /var/log/cloud-init-output.log' sends output to the log file
-      #       ## NOTE: you can SSH in and read/tail this file to debug cloud-init
-      #       all: '| tee -a /var/log/cloud-init-output.log'
+      #     ## === Step 8: Subscribe to SNS topic ===
+      #     ## this triggers the SubscriptionConfirmation POST to /notify while the app is running
+      #     aws sns subscribe \
+      #       --topic-arn ${DS5220DP1Topic} \
+      #       --protocol http \
+      #       --endpoint http://${ElasticIP}:8000/notify \
+      #       --region ${AWS::Region}
+
+      ## the "hard way" ... using cloud init ... a little less legible but more sophisticated
+      ## NOTE: !Sub works inside UserData Fn::Base64 blocks ...
+      ## ... but cloud-init doesn't process CF intrinsic functions on its own
+      ## ... so we use !Sub at the CF level to inject ${BucketName} before cloud-init ever sees it
+      UserData:
+        Fn::Base64: !Sub |
+          #cloud-config
+
+          ## ==================== PACKAGE MANAGEMENT SETUP ====================
+          ## configure apt as package manager
+          apt:
+            sources:
+              ubuntu:
+                ## point to the official Ubuntu package repository
+                ## $RELEASE will be replaced with the OS version env variable in the AMI (focal, jammy, etc.)
+                source: 'deb http://archive.ubuntu.com/ubuntu $RELEASE main universe'
+            conf: |
+              ## skip the install for recommended packages to save time
+              APT {
+                Install-Recommends 0;
+              };
+
+          ## ==================== INSTALL SYSTEM PACKAGES ====================
+          packages:
+            - python3
+            - python3-pip
+            - python3-venv
+            - git
+            - awscli
+
+          ## ==================== WRITE ENV FILE ====================
+          ## write_files runs before runcmd, so the env var is available to the app
+          ## this is the cloud-init native way to write files (vs echo >> in a shell script)
+          write_files:
+            - path: /etc/environment
+              ## append to the existing file rather than overwriting
+              append: true
+              content: |
+                BUCKET_NAME=${BucketName}
+
+          ## ==================== RUN SETUP COMMANDS ====================
+          ## runcmd is a list of shell commands to run (in order) during boot
+          runcmd:
+            ## === Step 1: Create the directory ===
+            ## /opt is a standard location for third-party applications in Linux
+            - mkdir -p /opt
+
+            ## === Step 2: Clone application code ===
+            - cd /opt && git clone https://github.com/vpnagjar/anomaly-detection.git
+
+            ## === Step 3: Create a Python virtual environment ===
+            - python3 -m venv /opt/anomaly-detection/venv
+
+            ## === Step 4: Upgrade pip inside the virtual environment ===
+            - /opt/anomaly-detection/venv/bin/pip install --upgrade pip
+
+            ## === Step 5: Install Python dependencies ===
+            ## everything is pip installable through requirements.txt
+            - /opt/anomaly-detection/venv/bin/pip install -r /opt/anomaly-detection/requirements.txt
+
+            ## === Step 6: Create a systemd service file ===
+            ## a service file tells systemd how to start/stop/restart the app ...
+            ## ... preferred over plain bash because systemd handles:
+            ##   - automatic restart if the app crashes
+            ##   - logging to journalctl (system logging)
+            ##   - starting on boot
+            ##   - graceful shutdown
+            ## the 'cat > file << EOF' syntax writes multi-line content to a file ...
+            ## ... so we're kind of writing this on the fly during the cloud init
+            - |
+              cat > /etc/systemd/system/fastapi-app.service << 'EOF'
+              [Unit]
+              Description=FastAPI Anomaly Detection App
+              After=network.target
+
+              [Service]
+              Type=simple
+              User=root
+              WorkingDirectory=/opt/anomaly-detection
+              Environment="PATH=/opt/anomaly-detection/venv/bin"
+              EnvironmentFile=/etc/environment
+              ExecStart=/opt/anomaly-detection/venv/bin/fastapi run /opt/anomaly-detection/app.py --host 0.0.0.0
+              Restart=on-failure
+              RestartSec=5
+
+              [Install]
+              WantedBy=multi-user.target
+              EOF
+
+            ## === Step 7: Reload systemd configuration ===
+            ## systemctl daemon-reload scans /etc/systemd/system/ for new services
+            - systemctl daemon-reload
+
+            ## === Step 8: Enable the service on boot ===
+            ## systemctl enable makes the service start automatically when the instance boots
+            - systemctl enable fastapi-app.service
+
+            ## === Step 9: Start the service immediately ===
+            ## systemctl start runs the service right now (don't wait for reboot)
+            - systemctl start fastapi-app.service
+
+            ## === Step 10: Wait for the app to be ready before subscribing ===
+            - |
+              echo "Waiting for FastAPI to start..."
+              for i in $(seq 1 30); do
+                curl -sf http://localhost:8000/ > /dev/null 2>&1 && break
+                sleep 2
+              done
+
+            ## === Step 11: Subscribe to SNS topic ===
+            ## this triggers the SubscriptionConfirmation POST to /notify while the app is running
+            - >
+              aws sns subscribe
+              --topic-arn ${DS5220DP1Topic}
+              --protocol http
+              --endpoint http://${ElasticIP}:8000/notify
+              --region ${AWS::Region}
+
+          ## ==================== LOGGING ====================
+          ## configure cloud-init output logging
+          output:
+            ## 'all' means: capture all cloud-init output
+            ## '| tee -a /var/log/cloud-init-output.log' sends output to the log file
+            ## NOTE: you can SSH in and read/tail this file to debug cloud-init
+            all: '| tee -a /var/log/cloud-init-output.log'
 
   ## ==================== ELASTIC IP ====================
   ## created standalone (no InstanceId) so EC2 UserData can reference it without circular dependency
