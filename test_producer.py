@@ -6,15 +6,20 @@ import random
 import boto3
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
+from dotenv import load_dotenv
 import os
 
+
+load_dotenv()
+
 s3 = boto3.client("s3")
-BUCKET_NAME = os.environ["BUCKET_NAME"]
+BUCKET_NAME = os.getenv("BUCKET_NAME")
 
 
 def generate_batch(n_rows: int = 100, inject_anomalies: bool = True) -> pd.DataFrame:
-    base_time = datetime.utcnow()
+    ## use contemporary version of getting UTC timestamp on "now"
+    base_time = datetime.now(UTC)
 
     data = {
         "timestamp": [

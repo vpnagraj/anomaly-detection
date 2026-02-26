@@ -4,4 +4,4 @@ numpy
 requests
 fastapi[standard]
 scikit-learn
-
+python-dotenv
