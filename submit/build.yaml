@@ -382,10 +382,16 @@ Resources:
                 'aws:SourceArn': !Sub 'arn:aws:s3:::${BucketName}'
 
   ## ==================== SNS SUBSCRIPTION ====================
-  ## NOTE: subscription is created at the end of the EC2 UserData bootstrap script
-  ## via `aws sns subscribe` ... this ensures the FastAPI app is running and can
-  ## handle the SubscriptionConfirmation POST from SNS immediately
-  ## (see /notify endpoint in the FastAPI app)
+  ## declarative subscription so it's visible in the stack and cleaned up on delete
+  ## the `aws sns subscribe` in UserData re-triggers confirmation while the app is running
+  ## SNS deduplicates subscriptions to the same protocol + endpoint
+
+  SNSHTTPSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      Protocol: http
+      TopicArn: !Ref DS5220DP1Topic
+      Endpoint: !Sub 'http://${ElasticIP}:8000/notify'
 
   ## ==================== S3 BUCKET ====================
 
