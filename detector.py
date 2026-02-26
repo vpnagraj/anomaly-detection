@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
+import logging
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import IsolationForest
 from typing import Optional
+
+logger = logging.getLogger(__name__)
 
 
 class AnomalyDetector:
@@ -52,6 +55,7 @@ class AnomalyDetector:
         method: str = "both"
     ) -> pd.DataFrame:
         result = df.copy()
+        logger.info(f"Running anomaly detection (method='{method}') on {len(df)} rows across channels: {numeric_cols}")
 
         # --- Z-score per channel ---
         if method in ("zscore", "both"):
@@ -61,10 +65,14 @@ class AnomalyDetector:
                     z_scores = self.zscore_flag(df[col], stats["mean"], stats["std"])
                     result[f"{col}_zscore"] = z_scores.round(4)
                     result[f"{col}_zscore_flag"] = z_scores > self.z_threshold
+                    zscore_flagged = int((z_scores > self.z_threshold).sum())
+                    logger.info(f"Z-score analysis for '{col}': {zscore_flagged} values exceeded threshold ({self.z_threshold})")
                 else:
                     # Not enough baseline history yet — flag as unknown
                     result[f"{col}_zscore"] = None
                     result[f"{col}_zscore_flag"] = None
+                    count = stats["count"] if stats else 0
+                    logger.info(f"Z-score skipped for '{col}': insufficient baseline history ({count}/30 observations)")
 
         # --- IsolationForest across all channels ---
         if method in ("isolation", "both"):
@@ -72,6 +80,8 @@ class AnomalyDetector:
             result["if_label"] = labels          # -1 or 1
             result["if_score"] = scores.round(4) # continuous anomaly score
             result["if_flag"] = labels == -1
+            if_flagged = int((labels == -1).sum())
+            logger.info(f"Isolation Forest analysis: {if_flagged}/{len(df)} rows flagged as anomalous")
 
         # --- Consensus flag: anomalous by at least one method ---
         if method == "both":

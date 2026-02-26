@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 import json
 import math
+import logging
 import boto3
 from datetime import datetime
 from typing import Optional
 
 s3 = boto3.client("s3")
+logger = logging.getLogger(__name__)
 
 
 class BaselineManager:
@@ -33,6 +35,8 @@ class BaselineManager:
             Body=json.dumps(baseline, indent=2),
             ContentType="application/json"
         )
+        channels = [ch for ch in baseline if ch != "last_updated"]
+        logger.info(f"Baseline JSON file updated and saved to s3://{self.bucket}/{self.baseline_key}. Channels: {channels}. Last updated: {baseline['last_updated']}")
 
     def update(self, baseline: dict, channel: str, new_values: list[float]) -> dict:
         """

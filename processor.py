@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import io
+import logging
 import boto3
 import pandas as pd
 from datetime import datetime
@@ -9,11 +10,13 @@ from baseline import BaselineManager
 from detector import AnomalyDetector
 
 s3 = boto3.client("s3")
+logger = logging.getLogger(__name__)
 
 
 NUMERIC_COLS = ["temperature", "humidity", "pressure", "wind_speed"]  # students configure this
 
 def process_file(bucket: str, key: str):
+    logger.info(f"Processing new file: s3://{bucket}/{key}")
     print(f"Processing: s3://{bucket}/{key}")
 
     # 1. Download raw file
@@ -21,6 +24,7 @@ def process_file(bucket: str, key: str):
     df = pd.read_csv(io.BytesIO(response["Body"].read()))
 
     print(f"  Loaded {len(df)} rows, columns: {list(df.columns)}")
+    logger.info(f"Loaded {len(df)} rows from {key}. Columns: {list(df.columns)}")
 
     # 2. Load current baseline
     baseline_mgr = BaselineManager(bucket=bucket)
@@ -33,6 +37,7 @@ def process_file(bucket: str, key: str):
             clean_values = df[col].dropna().tolist()
             if clean_values:
                 baseline = baseline_mgr.update(baseline, col, clean_values)
+                logger.info(f"Baseline updated for channel '{col}': count={baseline[col]['count']}, mean={baseline[col]['mean']:.4f}, std={baseline[col].get('std', 0.0):.4f}")
 
     # 4. Run detection
     detector = AnomalyDetector(z_threshold=3.0, contamination=0.05)
@@ -54,6 +59,12 @@ def process_file(bucket: str, key: str):
 
     # 7. Build and return a processing summary
     anomaly_count = int(scored_df["anomaly"].sum()) if "anomaly" in scored_df else 0
+
+    if anomaly_count > 0:
+        logger.info(f"Anomalies detected: {anomaly_count}/{len(df)} rows flagged as anomalous in {key}")
+    else:
+        logger.info(f"No anomalies detected in {key} ({len(df)} rows processed)")
+
     summary = {
         "source_key": key,
         "output_key": output_key,
@@ -76,4 +87,5 @@ def process_file(bucket: str, key: str):
     )
 
     print(f"  Done: {anomaly_count}/{len(df)} anomalies flagged")
+    logger.info(f"Processing complete for {key}. Summary written to {summary_key}")
     return summary

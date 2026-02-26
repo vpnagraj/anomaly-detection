@@ -5,6 +5,7 @@ import os
 import boto3
 import pandas as pd
 import requests
+import logging
 from datetime import datetime
 from fastapi import FastAPI, BackgroundTasks, Request
 from baseline import BaselineManager
@@ -14,6 +15,21 @@ app = FastAPI(title="Anomaly Detection Pipeline")
 
 s3 = boto3.client("s3")
 BUCKET_NAME = os.environ["BUCKET_NAME"]
+
+## configure logging
+## this will print logged messages to console ...
+## ... and store in a local provision.log file
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler("/opt/anomaly-detection/provision.log", mode="a", encoding="utf-8")
+    ]
+)
+
+## instantiate logger
+logger = logging.getLogger(__name__)
 
 # ── SNS subscription confirmation + message handler ──────────────────────────
 
@@ -35,6 +51,7 @@ async def handle_sns(request: Request, background_tasks: BackgroundTasks):
         for record in s3_event.get("Records", []):
             key = record["s3"]["object"]["key"]
             if key.startswith("raw/") and key.endswith(".csv"):
+                logger.info(f"New file arrived: s3://{BUCKET_NAME}/{key}")
                 background_tasks.add_task(process_file, BUCKET_NAME, key)
 
     return {"status": "ok"}
@@ -66,8 +83,11 @@ def get_recent_anomalies(limit: int = 50):
             flagged = df[df["anomaly"] == True].copy()
             flagged["source_file"] = key
             all_anomalies.append(flagged)
+            logger.info("Anomalies detected!")
+
 
     if not all_anomalies:
+        logger.info("No anomalies detected!")
         return {"count": 0, "anomalies": []}
 
     combined = pd.concat(all_anomalies).head(limit)
@@ -118,7 +138,7 @@ def get_current_baseline():
             "std": round(stats.get("std", 0.0), 4),
             "baseline_mature": stats["count"] >= 30,
         }
-
+    
     return {
         "last_updated": baseline.get("last_updated"),
         "channels": channels,
