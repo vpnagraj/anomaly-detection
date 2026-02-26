@@ -155,7 +155,7 @@ Resources:
       #
       #     ## === Step 3: Clone your application code ===
       #     cd /opt
-      #     git clone https://github.com/vpnagjar/anomaly-detection.git
+      #     git clone https://github.com/vpnagraj/anomaly-detection.git
       #
       #     ## === Step 4: Create Python virtual environment ===
       #     cd /opt/anomaly-detection
@@ -287,7 +287,7 @@ Resources:
             ## systemctl start runs the service right now (don't wait for reboot)
             - systemctl start fastapi-app.service
 
-            ## === Step 10: Wait for the app to be ready before subscribing ===
+            ## === Step 10: Wait for the app to be ready ===
             - |
               echo "Waiting for FastAPI to start..."
               for i in $(seq 1 30); do
@@ -295,7 +295,21 @@ Resources:
                 sleep 2
               done
 
-            ## === Step 11: Subscribe to SNS topic ===
+            ## === Step 11: Wait for Elastic IP to be associated ===
+            ## the EIPAssociation is a separate CF resource that may not be done yet
+            ## instance metadata reflects the public IP only after association completes
+            - |
+              echo "Waiting for Elastic IP association..."
+              for i in $(seq 1 60); do
+                TOKEN=$(curl -sf -X PUT "http://169.254.169.254/latest/api/token" \
+                  -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+                PUBLIC_IP=$(curl -sf -H "X-aws-ec2-metadata-token: $TOKEN" \
+                  http://169.254.169.254/latest/meta-data/public-ipv4 || true)
+                [ -n "$PUBLIC_IP" ] && echo "EIP associated: $PUBLIC_IP" && break
+                sleep 5
+              done
+
+            ## === Step 12: Subscribe to SNS topic ===
             ## this triggers the SubscriptionConfirmation POST to /notify while the app is running
             - >
               aws sns subscribe
