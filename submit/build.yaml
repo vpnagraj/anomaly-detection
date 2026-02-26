@@ -328,14 +328,20 @@ Resources:
       #       all: '| tee -a /var/log/cloud-init-output.log'
 
   ## ==================== ELASTIC IP ====================
-  ## need the elastic IP for the SNS subscription endpoint
+  ## created standalone (no InstanceId) so EC2 UserData can reference it without circular dependency
 
   ElasticIP:
     Type: 'AWS::EC2::EIP'
     Properties:
-      ## standard domain "vpc" just means this Elastic IP works with VPC
       Domain: vpc
-      ## !Ref EC2Instance refers to the instance created above
+
+  ## ==================== ELASTIC IP ASSOCIATION ====================
+  ## binds the EIP to the instance after both are created
+
+  ElasticIPAssociation:
+    Type: 'AWS::EC2::EIPAssociation'
+    Properties:
+      AllocationId: !GetAtt ElasticIP.AllocationId
       InstanceId: !Ref EC2Instance
 
   ## ==================== SNS TOPIC ====================
