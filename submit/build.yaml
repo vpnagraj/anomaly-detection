@@ -1,1 +1,372 @@
-# cloudformation solution goes here
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation stack with EC2 instance, S3 bucket, and SNS notification services'
+## using a tag to associate this stack with a specific project in case there are other relevant stacks
+Tags:
+  - Key: Project
+  - Value: DS5220
+
+## ==================== PARAMETERS ====================
+## specify parameters when deploying ...
+## example: aws cloudformation create-stack --parameters ParameterKey=MyIP,ParameterValue=203.0.113.42/32
+Parameters:
+  MyIp:
+    Type: String
+    Description: 'IP address or CIDR block for SSH access (e.g., 203.0.113.42/32 for single IP, 203.0.113.0/24 for subnet)'
+    ## gnarly regex for constraint
+    AllowedPattern: '^(\d{1,3}\.){3}\d{1,3}(/\d{1,2})?$'
+    ConstraintDescription: 'Must be a valid IP address or CIDR block. Example: 192.168.1.100/32 or 10.0.0.0/8'
+
+## ==================== RESOURCES ====================
+Resources:
+
+  ## ==================== IAM SETUP ====================
+  ## IAM allows the code running on EC2 to access S3, without hardcoding AWS credentials
+  
+  EC2InstanceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      ## need a trust policy for the instance role to be available
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: 'sts:AssumeRole'
+
+  ## ==================== S3 PERMISSIONS POLICY ====================
+  
+  S3BucketPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: DS5220-DP1-S3Access
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            ## s3:GetObject = read a file from S3
+            ## s3:PutObject = write/upload a file to S3
+            ## s3:DeleteObject = delete a file from S3
+            ## s3:ListBucket = list the contents of a bucket
+            Action:
+              - 's3:GetObject'
+              - 's3:PutObject'
+              - 's3:DeleteObject'
+              - 's3:ListBucket'
+            ## !GetAtt DS5220-DP1-Bucket.Arn gets the bucket's Amazon Resource Name (unique ID)
+            ## second resource with /* means "all objects inside the bucket"
+            Resource:
+              - !GetAtt DS5220-DP1-Bucket.Arn
+              - !Sub '${DS5220-DP1-Bucket.Arn}/*'
+      Roles:
+        - !Ref EC2InstanceRole
+
+  ## ==================== INSTANCE PROFILE ====================
+  ## instance profile is needed to apply the role ... which is needed to apply the policy (aka permissions)
+  
+  EC2InstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Roles:
+        - !Ref EC2InstanceRole
+
+  ## ==================== SECURITY GROUP ====================
+  ## security group to control network traffic allowed IN (i.e., ingress)
+  
+  EC2SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: 'Security group for EC2 instance - controls SSH and HTTP access'
+      SecurityGroupIngress:
+        ## allow ssh from MyIP parameter passed to stack at deploy time
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref MyIP
+          Description: 'SSH from your IP only (secure remote access)'
+        
+        ## allow HTTP traffic on port 8000 from anywhere
+        - IpProtocol: tcp
+          FromPort: 8000
+          ToPort: 8000
+          CidrIp: 0.0.0.0/0
+          Description: 'Port 8000 (FastAPI app) accessible from anywhere'
+
+  ## ==================== EC2 INSTANCE ====================
+  
+  EC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ## ubuntu 24.04 AMI (found from previous reference architecture and verified in web console)
+      ImageId: 'ami-0b6c6ebed2801a5cb'
+      InstanceType: 't3.micro'
+      ## attach the IAM instance profile so the running instance has S3 permissions
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      ## associate security group defined elsewhere in the CF template
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroup
+
+      ## configure disk storage
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 16
+            ## gp2 = general purpose
+            VolumeType: gp2
+            ## clean up and delete the disk when instance is terminated
+            DeleteOnTermination: true
+
+      ## bootstrap!!
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -e
+      
+          ## === Step 0: Set bucket name in env ===
+          ## TODO: set bucket name as a param
+          echo "vpn7n-ds5220-dp1" >> /etc/environment
+
+          ## === Step 1: Update package lists ===
+          apt-get update -y
+          apt-get install -y git python3 python3-pip python3-venv
+      
+          ## === Step 2: Create application directory ===
+          mkdir -p /opt
+      
+          ## === Step 3: Clone your application code ===
+          cd /opt
+          git clone https://github.com/vpnagraj/anomaly-detection.git
+      
+          ## === Step 4: Create Python virtual environment ===
+          cd /opt/anomaly-detection
+          python3 -m venv /opt/anomaly-detection/venv
+      
+          ## === Step 5: Activate venv and install dependencies ===
+          source /opt/anomaly-detection/venv/bin/activate
+          /opt/anomaly-detection/venv/bin/pip install --upgrade pip
+          /opt/anomaly-detection/venv/bin/pip install -r /opt/anomaly-detection/requirements.txt
+      
+          ## === Step 6: Run the FastAPI app with reload ===
+          ## Note: This runs in foreground, so app keeps running
+          /opt/anomaly-detection/venv/bin/fastapi run /opt/anomaly-detection/app.py --reload
+      ## the "hard way" ... using cloud init ... a little less legible but more sophisticated
+      ## TODO: figure out a way to get the bucket name in cloud init
+      # UserData:
+      #   Fn::Base64: !Sub |
+      #     #cloud-config
+      #   
+      #     ## ==================== PACKAGE MANAGEMENT SETUP ====================
+      #     ## configure apt as package manager
+      #     apt:
+      #       sources:
+      #         ubuntu:
+      #           ## point to the official Ubuntu package repository
+      #           ## $RELEASE will be replaced with the OS version env variable in the AMI (focal, jammy, etc.)
+      #           source: 'deb http://archive.ubuntu.com/ubuntu $RELEASE main universe'
+      #       conf: |
+      #         ## skip the install for recommended packages to save time
+      #         APT {
+      #           Install-Recommends 0;
+      #         };
+      #   
+      #     ## ==================== INSTALL SYSTEM PACKAGES ====================
+      #     packages:
+      #       - python3
+      #       - python3-pip
+      #       - python3-venv
+      #       - git
+      #   
+      #     ## ==================== RUN SETUP COMMANDS ====================
+      #     ## runcmd is a list of shell commands to run (in order) during boot
+      #     runcmd:
+      #       ## === Step 1: Create the directory ===
+      #       ## /opt is a standard location for third-party applications in Linux
+      #       - mkdir -p /opt
+      #     
+      #       ## === Step 2: Clone application code ===
+      #       - cd /opt && git clone https://github.com/vpnagraj/anomaly-detection.git
+      #
+      #       ## === Step 3: Create a Python virtual environment ===
+      #       - python3 -m venv /opt/anomaly-detection/venv
+      #      
+      #       ## === Step 4: Upgrade pip inside the virtual environment ===
+      #       - /opt/anomaly-detection/venv/bin/pip install --upgrade pip
+      #    
+      #       ## === Step 5: Install Python dependencies ===
+      #       ## everything is pip installable through requirements.txt
+      #       - /opt/anomaly-detection/venv/bin/pip install -r /opt/anomaly-detection/requirements.txt
+      #  
+      #       ## === Step 6: Create a systemd service file ===
+      #       ## a service file tells systemd how to start/stop/restart the app ...
+      #       ## ... preferred over plain bash because systemd handles:
+      #       ##   - automatic restart if the app crashes
+      #       ##   - logging to journalctl (system logging)
+      #       ##   - starting on boot
+      #       ##   - graceful shutdown
+      #       ## the 'cat > file << EOF' syntax writes multi-line content to a file ... 
+      #       ## ... so we're kind of writing this on the fly during the cloud init
+      #       - |
+      #         cat > /etc/systemd/system/fastapi-app.service << 'EOF'
+      #         ## [Unit] is metadata about the service
+      #         [Unit]
+      #         Description=FastAPI Anomaly Detection App
+      #         ## After=network.target means start this service after the network is ready
+      #         After=network.target
+      #    
+      #         ## [Service] defines how to run the service
+      #         [Service]
+      #         ## Type=simple means the process runs in foreground 
+      #         Type=simple
+      #         ## User=root means run as root user
+      #         User=root
+      #         ## WorkingDirectory is option to change to a directory before running ExecStart
+      #         WorkingDirectory=/opt/anomaly-detection
+      #         ## Environment is where the environment variables are that the process can see
+      #         Environment="PATH=/opt/anomaly-detection/venv/bin"
+      #         ## ExecStart is the actual command to start the service
+      #         ExecStart=/opt/anomaly-detection/venv/bin/fastapi run /opt/anomaly-detection/app.py
+      #         ## Restart=on-failure means if the app crashes/exits with error, restart it
+      #         Restart=on-failure
+      #         ## RestartSec=5 means wait 5 seconds before restarting (prevents restart loops)
+      #         RestartSec=5
+      #       
+      #         ## [Install] defines how to enable this service on boot
+      #         [Install]
+      #         ## WantedBy=multi-user.target means start this service during normal boot
+      #         WantedBy=multi-user.target
+      #         EOF
+      #     
+      #       ## === Step 7: Reload systemd configuration ===
+      #       ## systemctl daemon-reload scans /etc/systemd/system/ for new services
+      #       - systemctl daemon-reload
+      #     
+      #       ## === Step 8: Enable the service on boot ===
+      #       ## systemctl enable makes the service start automatically when the instance boots
+      #       - systemctl enable fastapi-app.service
+      #   
+      #       ## === Step 9: Start the service immediately ===
+      #       ## systemctl start runs the service right now (don't wait for reboot)
+      #       - systemctl start fastapi-app.service
+      #
+      #     ## ==================== LOGGING ====================
+      #     ## configure cloud-init output logging
+      #     output:
+      #       ## 'all' means: capture all cloud-init output
+      #       ## '| tee -a /var/log/cloud-init-output.log' sends output to the log file
+      #       ## NOTE: you can SSH in and read/tail this file to debug cloud-init
+      #       all: '| tee -a /var/log/cloud-init-output.log'
+
+  ## ==================== ELASTIC IP ====================
+  ## need the elastic IP for the SNS subscription endpoint
+
+  ElasticIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      ## standard domain "vpc" just means this Elastic IP works with VPC
+      Domain: vpc
+      ## !Ref EC2Instance refers to the instance created above
+      InstanceId: !Ref EC2Instance
+
+  ## ==================== SNS TOPIC ====================
+  
+  DS5220DP1Topic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      TopicName: ds5220-dp1
+      ## human-readable display name for console
+      DisplayName: 'DS5220 Data Project 1'
+
+  ## ==================== SNS SUBSCRIPTION ====================
+  ## data flow: S3 -> SNS Topic -> HTTP subscription -> app (in this case FastAPI running on the instance)
+
+  SNSHTTPSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      ## protocol of http means that SNS will make HTTP POST requests to the endpoint
+      Protocol: http
+      TopicArn: !Ref DS5220DP1Topic
+      ## endpoint is URL to send notifications to
+      ## !Sub allows variable substitution: ${ElasticIP} is replaced with actual IP
+      Endpoint: !Sub 'http://${ElasticIP}:8000/notify'
+
+  ## ==================== S3 BUCKET ====================
+  
+  DS5220-DP1-Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      ## NOTE: bucket name of course has to be globally unique (deployment will fail if this bucket exists)
+      BucketName: vpn7n-ds5220-dp1
+      
+      NotificationConfiguration:
+        TopicConfigurations:
+          ## in plain English: notify SNS when a .csv file is uploaded to raw/ folder
+          - Event: 's3:ObjectCreated:*'  ## Trigger on any object creation (PutObject, CopyObject, etc.)
+            Topic: !Ref DS5220DP1Topic  ## Send notification to our SNS topic
+            Filter:
+              Key:
+                FilterRules:
+                  ## only files in the "raw/" prefix dir
+                  - Name: prefix
+                    Value: raw/
+                  ## only files ending with ".csv"
+                  - Name: suffix
+                    Value: .csv
+
+  ## ==================== S3 BUCKET POLICY ====================
+  ## bucket policy to allow S3 service to publish messages to SNS
+
+  S3BucketNotificationPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref DS5220-DP1-Bucket
+      PolicyText:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            ## grants to "principal" S3 service itself (not a user/role)
+            Principal:
+              Service: s3.amazonaws.com
+            ## need to allow SNS:Publish to publish messages to the queue on upload
+            Action: 'SNS:Publish'
+            ## the Resource here is which SNS topic(s) can be published to
+            Resource: !Ref DS5220DP1Topic
+            Condition:
+              ## require this is happening on my account
+              StringEquals:
+                'aws:SourceAccount': !Ref 'AWS::AccountId'
+              ## restrict to the specific bucket
+              ArnLike:
+                'aws:SourceArn': !GetAtt DS5220-DP1-Bucket
+
+## ==================== OUTPUTS ====================
+## values to be displayed after stack creation
+## retrieve in AWS console or use: aws cloudformation describe-stacks
+Outputs:
+  ElasticIPAddress:
+    Description: 'The public Elastic IP address the EC2 instance'
+    Value: !Ref ElasticIP
+    Export:
+      Name: !Sub '${AWS::StackName}-ElasticIP'
+
+  EC2InstanceId:
+    Description: 'The EC2 Instance ID to identify the instance in the console'
+    Value: !Ref EC2Instance
+    Export:
+      Name: !Sub '${AWS::StackName}-InstanceId'
+
+  S3BucketName:
+    Description: 'The S3 bucket name'
+    Value: !Ref DS5220-DP1-Bucket
+    Export:
+      Name: !Sub '${AWS::StackName}-BucketName'
+
+  SNSTopicArn:
+    Description: 'The SNS topic ARN'
+    Value: !Ref DS5220DP1Topic
+    Export:
+      Name: !Sub '${AWS::StackName}-TopicArn'
+
+  SecurityGroupId:
+    Description: 'The security group ID to control ingress to the instance'
+    Value: !Ref EC2SecurityGroup
+    Export:
+      Name: !Sub '${AWS::StackName}-SecurityGroupId'
