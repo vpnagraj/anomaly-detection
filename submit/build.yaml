@@ -1,15 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'CloudFormation stack with EC2 instance, S3 bucket, and SNS notification services'
-## using a tag to associate this stack with a specific project in case there are other relevant stacks
-Tags:
-  - Key: Project
-  - Value: DS5220
 
 ## ==================== PARAMETERS ====================
 ## specify parameters when deploying ...
 ## example: aws cloudformation create-stack --parameters ParameterKey=MyIP,ParameterValue=203.0.113.42/32
 Parameters:
-  MyIp:
+  MyIP:
     Type: String
     Description: 'IP address or CIDR block for SSH access (e.g., 203.0.113.42/32 for single IP, 203.0.113.0/24 for subnet)'
     ## gnarly regex for constraint
@@ -53,11 +49,11 @@ Resources:
               - 's3:PutObject'
               - 's3:DeleteObject'
               - 's3:ListBucket'
-            ## !GetAtt DS5220-DP1-Bucket.Arn gets the bucket's Amazon Resource Name (unique ID)
+            ## !GetAtt DS5220DP1Bucket.Arn gets the bucket's Amazon Resource Name (unique ID)
             ## second resource with /* means "all objects inside the bucket"
             Resource:
-              - !GetAtt DS5220-DP1-Bucket.Arn
-              - !Sub '${DS5220-DP1-Bucket.Arn}/*'
+              - !GetAtt DS5220DP1Bucket.Arn
+              - !Sub '${DS5220DP1Bucket.Arn}/*'
       Roles:
         - !Ref EC2InstanceRole
 
@@ -79,6 +75,7 @@ Resources:
       GroupDescription: 'Security group for EC2 instance - controls SSH and HTTP access'
       SecurityGroupIngress:
         ## allow ssh from MyIP parameter passed to stack at deploy time
+        - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
           CidrIp: !Ref MyIP
@@ -290,7 +287,7 @@ Resources:
 
   ## ==================== S3 BUCKET ====================
   
-  DS5220-DP1-Bucket:
+  DS5220DP1Bucket:
     Type: 'AWS::S3::Bucket'
     Properties:
       ## NOTE: bucket name of course has to be globally unique (deployment will fail if this bucket exists)
@@ -302,8 +299,8 @@ Resources:
           - Event: 's3:ObjectCreated:*'  ## Trigger on any object creation (PutObject, CopyObject, etc.)
             Topic: !Ref DS5220DP1Topic  ## Send notification to our SNS topic
             Filter:
-              Key:
-                FilterRules:
+              S3Key:
+                Rules:
                   ## only files in the "raw/" prefix dir
                   - Name: prefix
                     Value: raw/
@@ -317,7 +314,7 @@ Resources:
   S3BucketNotificationPolicy:
     Type: 'AWS::S3::BucketPolicy'
     Properties:
-      Bucket: !Ref DS5220-DP1-Bucket
+      Bucket: !Ref DS5220DP1Bucket
       PolicyText:
         Version: '2012-10-17'
         Statement:
@@ -335,7 +332,7 @@ Resources:
                 'aws:SourceAccount': !Ref 'AWS::AccountId'
               ## restrict to the specific bucket
               ArnLike:
-                'aws:SourceArn': !GetAtt DS5220-DP1-Bucket
+                'aws:SourceArn': !GetAtt DS5220DP1Bucket.Arn
 
 ## ==================== OUTPUTS ====================
 ## values to be displayed after stack creation
@@ -355,7 +352,7 @@ Outputs:
 
   S3BucketName:
     Description: 'The S3 bucket name'
-    Value: !Ref DS5220-DP1-Bucket
+    Value: !Ref DS5220DP1Bucket
     Export:
       Name: !Sub '${AWS::StackName}-BucketName'
 
