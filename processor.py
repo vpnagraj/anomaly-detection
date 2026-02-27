@@ -58,7 +58,16 @@ def process_file(bucket: str, key: str):
         # 6. Save updated baseline back to S3
         baseline_mgr.save(baseline)
 
-        # 7. Build and return a processing summary
+        # 7. Upload log file to S3
+        log_file = "/opt/anomaly-detection/provision.log"
+        log_key = "logs/provision.log"
+        try:
+            s3.upload_file(log_file, bucket, log_key)
+            logger.info(f"Log file uploaded to s3://{bucket}/{log_key}")
+        except Exception as e:
+            logger.error(f"Failed to upload log file to s3://{bucket}/{log_key}: {e}")
+
+        # 8. Build and return a processing summary
         anomaly_count = int(scored_df["anomaly"].sum()) if "anomaly" in scored_df else 0
 
         if anomaly_count > 0:
