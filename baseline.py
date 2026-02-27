@@ -29,14 +29,18 @@ class BaselineManager:
 
     def save(self, baseline: dict):
         baseline["last_updated"] = datetime.utcnow().isoformat()
-        s3.put_object(
-            Bucket=self.bucket,
-            Key=self.baseline_key,
-            Body=json.dumps(baseline, indent=2),
-            ContentType="application/json"
-        )
-        channels = [ch for ch in baseline if ch != "last_updated"]
-        logger.info(f"Baseline JSON file updated and saved to s3://{self.bucket}/{self.baseline_key}. Channels: {channels}. Last updated: {baseline['last_updated']}")
+        try:
+            s3.put_object(
+                Bucket=self.bucket,
+                Key=self.baseline_key,
+                Body=json.dumps(baseline, indent=2),
+                ContentType="application/json"
+            )
+            channels = [ch for ch in baseline if ch != "last_updated"]
+            logger.info(f"Baseline JSON file updated and saved to s3://{self.bucket}/{self.baseline_key}. Channels: {channels}. Last updated: {baseline['last_updated']}")
+        except Exception as e:
+            logger.error(f"Failed to save baseline to s3://{self.bucket}/{self.baseline_key}: {e}")
+            raise
 
     def update(self, baseline: dict, channel: str, new_values: list[float]) -> dict:
         """

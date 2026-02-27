@@ -42,7 +42,11 @@ async def handle_sns(request: Request, background_tasks: BackgroundTasks):
     # Visiting the SubscribeURL confirms the subscription.
     if msg_type == "SubscriptionConfirmation":
         confirm_url = body["SubscribeURL"]
-        requests.get(confirm_url)
+        try:
+            requests.get(confirm_url)
+        except Exception as e:
+            logger.error(f"SNS subscription confirmation failed: {e}")
+            return {"status": "error", "detail": str(e)}
         return {"status": "confirmed"}
 
     if msg_type == "Notification":

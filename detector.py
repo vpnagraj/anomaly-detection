@@ -76,12 +76,18 @@ class AnomalyDetector:
 
         # --- IsolationForest across all channels ---
         if method in ("isolation", "both"):
-            labels, scores = self.isolation_forest_flag(df, numeric_cols)
-            result["if_label"] = labels          # -1 or 1
-            result["if_score"] = scores.round(4) # continuous anomaly score
-            result["if_flag"] = labels == -1
-            if_flagged = int((labels == -1).sum())
-            logger.info(f"Isolation Forest analysis: {if_flagged}/{len(df)} rows flagged as anomalous")
+            try:
+                labels, scores = self.isolation_forest_flag(df, numeric_cols)
+                result["if_label"] = labels          # -1 or 1
+                result["if_score"] = scores.round(4) # continuous anomaly score
+                result["if_flag"] = labels == -1
+                if_flagged = int((labels == -1).sum())
+                logger.info(f"Isolation Forest analysis: {if_flagged}/{len(df)} rows flagged as anomalous")
+            except Exception as e:
+                logger.error(f"Isolation Forest failed: {e}")
+                result["if_label"] = 1
+                result["if_score"] = 0.0
+                result["if_flag"] = False
 
         # --- Consensus flag: anomalous by at least one method ---
         if method == "both":
@@ -96,5 +102,8 @@ class AnomalyDetector:
                 result["anomaly"] = any_zscore | result["if_flag"]
             else:
                 result["anomaly"] = result["if_flag"]
+
+            total_anomalies = int(result["anomaly"].sum())
+            logger.info(f"Consensus anomaly detection complete: {total_anomalies}/{len(df)} total anomalies flagged")
 
         return result
