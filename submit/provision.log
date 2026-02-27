@@ -1,0 +1,667 @@
+2026-02-27 01:06:36,691 - uvicorn.error - INFO - Started server process [2174]
+2026-02-27 01:06:36,692 - uvicorn.error - INFO - Waiting for application startup.
+2026-02-27 01:06:36,693 - uvicorn.error - INFO - Application startup complete.
+2026-02-27 01:06:36,694 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2026-02-27 01:11:07,343 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011106.csv
+2026-02-27 01:11:07,351 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011106.csv
+2026-02-27 01:11:07,492 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T011106.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:11:07,641 - processor - INFO - Baseline updated for channel 'temperature': count=100, mean=22.1391, std=1.9287
+2026-02-27 01:11:07,642 - processor - INFO - Baseline updated for channel 'humidity': count=100, mean=54.0220, std=5.5172
+2026-02-27 01:11:07,643 - processor - INFO - Baseline updated for channel 'pressure': count=100, mean=1013.0051, std=2.9423
+2026-02-27 01:11:07,643 - processor - INFO - Baseline updated for channel 'wind_speed': count=100, mean=10.1899, std=3.6703
+2026-02-27 01:11:07,682 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:11:07,684 - detector - INFO - Z-score analysis for 'temperature': 1 values exceeded threshold (3.0)
+2026-02-27 01:11:07,685 - detector - INFO - Z-score analysis for 'humidity': 1 values exceeded threshold (3.0)
+2026-02-27 01:11:07,686 - detector - INFO - Z-score analysis for 'pressure': 1 values exceeded threshold (3.0)
+2026-02-27 01:11:07,687 - detector - INFO - Z-score analysis for 'wind_speed': 3 values exceeded threshold (3.0)
+2026-02-27 01:11:07,893 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:11:07,895 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:11:08,063 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:11:08.029649
+2026-02-27 01:11:08,097 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:11:08,098 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T011106.csv
+2026-02-27 01:11:08,128 - processor - INFO - Processing complete for raw/sensors_20260227T011106.csv. Summary written to processed/sensors_20260227T011106_summary.json
+2026-02-27 01:12:07,781 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011206.csv
+2026-02-27 01:12:07,782 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011206.csv
+2026-02-27 01:12:07,859 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T011206.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:12:07,958 - processor - INFO - Baseline updated for channel 'temperature': count=200, mean=22.0011, std=2.5261
+2026-02-27 01:12:07,958 - processor - INFO - Baseline updated for channel 'humidity': count=200, mean=54.4598, std=5.2826
+2026-02-27 01:12:07,959 - processor - INFO - Baseline updated for channel 'pressure': count=200, mean=1012.7995, std=3.3768
+2026-02-27 01:12:07,959 - processor - INFO - Baseline updated for channel 'wind_speed': count=200, mean=9.9601, std=3.3543
+2026-02-27 01:12:07,960 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:12:07,961 - detector - INFO - Z-score analysis for 'temperature': 3 values exceeded threshold (3.0)
+2026-02-27 01:12:07,962 - detector - INFO - Z-score analysis for 'humidity': 0 values exceeded threshold (3.0)
+2026-02-27 01:12:07,963 - detector - INFO - Z-score analysis for 'pressure': 1 values exceeded threshold (3.0)
+2026-02-27 01:12:07,965 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:12:08,124 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:12:08,126 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:12:08,192 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:12:08.161093
+2026-02-27 01:12:08,220 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:12:08,221 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T011206.csv
+2026-02-27 01:12:08,246 - processor - INFO - Processing complete for raw/sensors_20260227T011206.csv. Summary written to processed/sensors_20260227T011206_summary.json
+2026-02-27 01:13:08,024 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011307.csv
+2026-02-27 01:13:08,026 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011307.csv
+2026-02-27 01:13:08,101 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T011307.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:13:08,172 - processor - INFO - Baseline updated for channel 'temperature': count=300, mean=21.9584, std=2.2830
+2026-02-27 01:13:08,173 - processor - INFO - Baseline updated for channel 'humidity': count=300, mean=54.5691, std=5.2598
+2026-02-27 01:13:08,173 - processor - INFO - Baseline updated for channel 'pressure': count=300, mean=1012.9470, std=3.8784
+2026-02-27 01:13:08,173 - processor - INFO - Baseline updated for channel 'wind_speed': count=300, mean=9.9824, std=3.1503
+2026-02-27 01:13:08,174 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:13:08,175 - detector - INFO - Z-score analysis for 'temperature': 1 values exceeded threshold (3.0)
+2026-02-27 01:13:08,176 - detector - INFO - Z-score analysis for 'humidity': 2 values exceeded threshold (3.0)
+2026-02-27 01:13:08,177 - detector - INFO - Z-score analysis for 'pressure': 2 values exceeded threshold (3.0)
+2026-02-27 01:13:08,178 - detector - INFO - Z-score analysis for 'wind_speed': 0 values exceeded threshold (3.0)
+2026-02-27 01:13:08,357 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:13:08,360 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:13:08,425 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:13:08.400189
+2026-02-27 01:13:08,456 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:13:08,456 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T011307.csv
+2026-02-27 01:13:08,484 - processor - INFO - Processing complete for raw/sensors_20260227T011307.csv. Summary written to processed/sensors_20260227T011307_summary.json
+2026-02-27 01:14:08,742 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011407.csv
+2026-02-27 01:14:08,743 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011407.csv
+2026-02-27 01:14:08,824 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T011407.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:14:08,903 - processor - INFO - Baseline updated for channel 'temperature': count=400, mean=21.9679, std=2.2525
+2026-02-27 01:14:08,904 - processor - INFO - Baseline updated for channel 'humidity': count=400, mean=54.7609, std=5.2749
+2026-02-27 01:14:08,905 - processor - INFO - Baseline updated for channel 'pressure': count=400, mean=1012.8163, std=3.7631
+2026-02-27 01:14:08,906 - processor - INFO - Baseline updated for channel 'wind_speed': count=400, mean=10.0273, std=3.3067
+2026-02-27 01:14:08,906 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:14:08,907 - detector - INFO - Z-score analysis for 'temperature': 3 values exceeded threshold (3.0)
+2026-02-27 01:14:08,908 - detector - INFO - Z-score analysis for 'humidity': 1 values exceeded threshold (3.0)
+2026-02-27 01:14:08,909 - detector - INFO - Z-score analysis for 'pressure': 0 values exceeded threshold (3.0)
+2026-02-27 01:14:08,910 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:14:09,075 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:14:09,078 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:14:09,143 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:14:09.109468
+2026-02-27 01:14:09,185 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:14:09,185 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T011407.csv
+2026-02-27 01:14:09,221 - processor - INFO - Processing complete for raw/sensors_20260227T011407.csv. Summary written to processed/sensors_20260227T011407_summary.json
+2026-02-27 01:15:09,107 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011507.csv
+2026-02-27 01:15:09,108 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011507.csv
+2026-02-27 01:15:09,192 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T011507.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:15:09,273 - processor - INFO - Baseline updated for channel 'temperature': count=500, mean=22.0495, std=2.2023
+2026-02-27 01:15:09,273 - processor - INFO - Baseline updated for channel 'humidity': count=500, mean=54.6329, std=6.0381
+2026-02-27 01:15:09,274 - processor - INFO - Baseline updated for channel 'pressure': count=500, mean=1012.8269, std=3.6401
+2026-02-27 01:15:09,274 - processor - INFO - Baseline updated for channel 'wind_speed': count=500, mean=9.9435, std=3.1829
+2026-02-27 01:15:09,274 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:15:09,275 - detector - INFO - Z-score analysis for 'temperature': 2 values exceeded threshold (3.0)
+2026-02-27 01:15:09,276 - detector - INFO - Z-score analysis for 'humidity': 2 values exceeded threshold (3.0)
+2026-02-27 01:15:09,277 - detector - INFO - Z-score analysis for 'pressure': 0 values exceeded threshold (3.0)
+2026-02-27 01:15:09,278 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:15:09,444 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:15:09,447 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:15:09,536 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:15:09.500487
+2026-02-27 01:15:09,566 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:15:09,567 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T011507.csv
+2026-02-27 01:15:09,604 - processor - INFO - Processing complete for raw/sensors_20260227T011507.csv. Summary written to processed/sensors_20260227T011507_summary.json
+2026-02-27 01:16:08,940 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011608.csv
+2026-02-27 01:16:08,941 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011608.csv
+2026-02-27 01:16:09,022 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T011608.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:16:09,125 - processor - INFO - Baseline updated for channel 'temperature': count=600, mean=22.0416, std=2.1144
+2026-02-27 01:16:09,125 - processor - INFO - Baseline updated for channel 'humidity': count=600, mean=54.5113, std=6.1154
+2026-02-27 01:16:09,126 - processor - INFO - Baseline updated for channel 'pressure': count=600, mean=1012.7686, std=3.7782
+2026-02-27 01:16:09,126 - processor - INFO - Baseline updated for channel 'wind_speed': count=600, mean=9.9477, std=3.2127
+2026-02-27 01:16:09,127 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:16:09,128 - detector - INFO - Z-score analysis for 'temperature': 0 values exceeded threshold (3.0)
+2026-02-27 01:16:09,129 - detector - INFO - Z-score analysis for 'humidity': 2 values exceeded threshold (3.0)
+2026-02-27 01:16:09,130 - detector - INFO - Z-score analysis for 'pressure': 2 values exceeded threshold (3.0)
+2026-02-27 01:16:09,131 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:16:09,287 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:16:09,289 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:16:09,346 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:16:09.321527
+2026-02-27 01:16:09,380 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:16:09,380 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T011608.csv
+2026-02-27 01:16:09,411 - processor - INFO - Processing complete for raw/sensors_20260227T011608.csv. Summary written to processed/sensors_20260227T011608_summary.json
+2026-02-27 01:17:09,163 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011708.csv
+2026-02-27 01:17:09,164 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011708.csv
+2026-02-27 01:17:09,237 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T011708.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:17:09,313 - processor - INFO - Baseline updated for channel 'temperature': count=700, mean=22.0666, std=2.0572
+2026-02-27 01:17:09,313 - processor - INFO - Baseline updated for channel 'humidity': count=700, mean=54.6002, std=6.3743
+2026-02-27 01:17:09,314 - processor - INFO - Baseline updated for channel 'pressure': count=700, mean=1012.8359, std=3.6431
+2026-02-27 01:17:09,314 - processor - INFO - Baseline updated for channel 'wind_speed': count=700, mean=10.0602, std=3.3724
+2026-02-27 01:17:09,314 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:17:09,316 - detector - INFO - Z-score analysis for 'temperature': 1 values exceeded threshold (3.0)
+2026-02-27 01:17:09,317 - detector - INFO - Z-score analysis for 'humidity': 2 values exceeded threshold (3.0)
+2026-02-27 01:17:09,318 - detector - INFO - Z-score analysis for 'pressure': 0 values exceeded threshold (3.0)
+2026-02-27 01:17:09,319 - detector - INFO - Z-score analysis for 'wind_speed': 2 values exceeded threshold (3.0)
+2026-02-27 01:17:09,500 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:17:09,503 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:17:09,565 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:17:09.537003
+2026-02-27 01:17:09,598 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:17:09,599 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T011708.csv
+2026-02-27 01:17:09,626 - processor - INFO - Processing complete for raw/sensors_20260227T011708.csv. Summary written to processed/sensors_20260227T011708_summary.json
+2026-02-27 01:18:09,661 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011808.csv
+2026-02-27 01:18:09,662 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011808.csv
+2026-02-27 01:18:09,737 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T011808.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:18:09,811 - processor - INFO - Baseline updated for channel 'temperature': count=800, mean=22.0340, std=2.1070
+2026-02-27 01:18:09,812 - processor - INFO - Baseline updated for channel 'humidity': count=800, mean=54.5276, std=6.3119
+2026-02-27 01:18:09,812 - processor - INFO - Baseline updated for channel 'pressure': count=800, mean=1012.8070, std=3.5632
+2026-02-27 01:18:09,813 - processor - INFO - Baseline updated for channel 'wind_speed': count=800, mean=10.0917, std=3.3105
+2026-02-27 01:18:09,813 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:18:09,814 - detector - INFO - Z-score analysis for 'temperature': 3 values exceeded threshold (3.0)
+2026-02-27 01:18:09,816 - detector - INFO - Z-score analysis for 'humidity': 1 values exceeded threshold (3.0)
+2026-02-27 01:18:09,817 - detector - INFO - Z-score analysis for 'pressure': 0 values exceeded threshold (3.0)
+2026-02-27 01:18:09,818 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:18:09,976 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:18:09,978 - detector - INFO - Consensus anomaly detection complete: 7/100 total anomalies flagged
+2026-02-27 01:18:10,044 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:18:10.004075
+2026-02-27 01:18:10,074 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:18:10,074 - processor - INFO - Anomalies detected: 7/100 rows flagged as anomalous in raw/sensors_20260227T011808.csv
+2026-02-27 01:18:10,105 - processor - INFO - Processing complete for raw/sensors_20260227T011808.csv. Summary written to processed/sensors_20260227T011808_summary.json
+2026-02-27 01:19:10,027 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011908.csv
+2026-02-27 01:19:10,028 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T011908.csv
+2026-02-27 01:19:10,110 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T011908.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:19:10,209 - processor - INFO - Baseline updated for channel 'temperature': count=900, mean=22.0306, std=2.0364
+2026-02-27 01:19:10,210 - processor - INFO - Baseline updated for channel 'humidity': count=900, mean=54.5638, std=6.2975
+2026-02-27 01:19:10,210 - processor - INFO - Baseline updated for channel 'pressure': count=900, mean=1012.8763, std=3.6974
+2026-02-27 01:19:10,210 - processor - INFO - Baseline updated for channel 'wind_speed': count=900, mean=10.0501, std=3.2561
+2026-02-27 01:19:10,210 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:19:10,212 - detector - INFO - Z-score analysis for 'temperature': 0 values exceeded threshold (3.0)
+2026-02-27 01:19:10,213 - detector - INFO - Z-score analysis for 'humidity': 1 values exceeded threshold (3.0)
+2026-02-27 01:19:10,214 - detector - INFO - Z-score analysis for 'pressure': 3 values exceeded threshold (3.0)
+2026-02-27 01:19:10,215 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:19:10,371 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:19:10,373 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:19:10,529 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:19:10.504136
+2026-02-27 01:19:10,573 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:19:10,573 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T011908.csv
+2026-02-27 01:19:10,601 - processor - INFO - Processing complete for raw/sensors_20260227T011908.csv. Summary written to processed/sensors_20260227T011908_summary.json
+2026-02-27 01:20:09,565 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012008.csv
+2026-02-27 01:20:09,566 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012008.csv
+2026-02-27 01:20:09,645 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T012008.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:20:09,722 - processor - INFO - Baseline updated for channel 'temperature': count=1000, mean=22.0015, std=2.0145
+2026-02-27 01:20:09,722 - processor - INFO - Baseline updated for channel 'humidity': count=1000, mean=54.5932, std=6.2736
+2026-02-27 01:20:09,723 - processor - INFO - Baseline updated for channel 'pressure': count=1000, mean=1012.8739, std=3.6701
+2026-02-27 01:20:09,723 - processor - INFO - Baseline updated for channel 'wind_speed': count=1000, mean=10.0652, std=3.2570
+2026-02-27 01:20:09,723 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:20:09,725 - detector - INFO - Z-score analysis for 'temperature': 2 values exceeded threshold (3.0)
+2026-02-27 01:20:09,726 - detector - INFO - Z-score analysis for 'humidity': 1 values exceeded threshold (3.0)
+2026-02-27 01:20:09,727 - detector - INFO - Z-score analysis for 'pressure': 1 values exceeded threshold (3.0)
+2026-02-27 01:20:09,727 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:20:09,884 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:20:09,886 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:20:09,949 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:20:09.921506
+2026-02-27 01:20:09,982 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:20:09,982 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T012008.csv
+2026-02-27 01:20:10,010 - processor - INFO - Processing complete for raw/sensors_20260227T012008.csv. Summary written to processed/sensors_20260227T012008_summary.json
+2026-02-27 01:21:10,144 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012109.csv
+2026-02-27 01:21:10,146 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012109.csv
+2026-02-27 01:21:10,222 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T012109.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:21:10,292 - processor - INFO - Baseline updated for channel 'temperature': count=1100, mean=22.0018, std=2.0070
+2026-02-27 01:21:10,293 - processor - INFO - Baseline updated for channel 'humidity': count=1100, mean=54.5844, std=6.1295
+2026-02-27 01:21:10,293 - processor - INFO - Baseline updated for channel 'pressure': count=1100, mean=1012.8476, std=3.7279
+2026-02-27 01:21:10,294 - processor - INFO - Baseline updated for channel 'wind_speed': count=1100, mean=10.0637, std=3.2366
+2026-02-27 01:21:10,294 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:21:10,296 - detector - INFO - Z-score analysis for 'temperature': 2 values exceeded threshold (3.0)
+2026-02-27 01:21:10,297 - detector - INFO - Z-score analysis for 'humidity': 0 values exceeded threshold (3.0)
+2026-02-27 01:21:10,298 - detector - INFO - Z-score analysis for 'pressure': 2 values exceeded threshold (3.0)
+2026-02-27 01:21:10,299 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:21:10,456 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:21:10,458 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:21:10,586 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:21:10.556160
+2026-02-27 01:21:10,624 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:21:10,624 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T012109.csv
+2026-02-27 01:21:10,723 - processor - INFO - Processing complete for raw/sensors_20260227T012109.csv. Summary written to processed/sensors_20260227T012109_summary.json
+2026-02-27 01:22:10,568 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012209.csv
+2026-02-27 01:22:10,569 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012209.csv
+2026-02-27 01:22:10,642 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T012209.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:22:10,713 - processor - INFO - Baseline updated for channel 'temperature': count=1200, mean=22.0260, std=2.0254
+2026-02-27 01:22:10,713 - processor - INFO - Baseline updated for channel 'humidity': count=1200, mean=54.6496, std=6.1730
+2026-02-27 01:22:10,714 - processor - INFO - Baseline updated for channel 'pressure': count=1200, mean=1012.9244, std=3.7388
+2026-02-27 01:22:10,714 - processor - INFO - Baseline updated for channel 'wind_speed': count=1200, mean=10.0264, std=3.2030
+2026-02-27 01:22:10,714 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:22:10,716 - detector - INFO - Z-score analysis for 'temperature': 2 values exceeded threshold (3.0)
+2026-02-27 01:22:10,717 - detector - INFO - Z-score analysis for 'humidity': 1 values exceeded threshold (3.0)
+2026-02-27 01:22:10,718 - detector - INFO - Z-score analysis for 'pressure': 1 values exceeded threshold (3.0)
+2026-02-27 01:22:10,719 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:22:10,875 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:22:10,877 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:22:10,933 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:22:10.908665
+2026-02-27 01:22:10,960 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:22:10,961 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T012209.csv
+2026-02-27 01:22:10,989 - processor - INFO - Processing complete for raw/sensors_20260227T012209.csv. Summary written to processed/sensors_20260227T012209_summary.json
+2026-02-27 01:23:10,923 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012309.csv
+2026-02-27 01:23:10,924 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012309.csv
+2026-02-27 01:23:11,001 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T012309.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:23:11,080 - processor - INFO - Baseline updated for channel 'temperature': count=1300, mean=22.0294, std=1.9832
+2026-02-27 01:23:11,081 - processor - INFO - Baseline updated for channel 'humidity': count=1300, mean=54.6710, std=6.1910
+2026-02-27 01:23:11,081 - processor - INFO - Baseline updated for channel 'pressure': count=1300, mean=1012.8632, std=3.8451
+2026-02-27 01:23:11,081 - processor - INFO - Baseline updated for channel 'wind_speed': count=1300, mean=9.9968, std=3.1939
+2026-02-27 01:23:11,082 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:23:11,083 - detector - INFO - Z-score analysis for 'temperature': 0 values exceeded threshold (3.0)
+2026-02-27 01:23:11,084 - detector - INFO - Z-score analysis for 'humidity': 1 values exceeded threshold (3.0)
+2026-02-27 01:23:11,085 - detector - INFO - Z-score analysis for 'pressure': 3 values exceeded threshold (3.0)
+2026-02-27 01:23:11,087 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:23:11,242 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:23:11,244 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:23:11,303 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:23:11.275532
+2026-02-27 01:23:11,334 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:23:11,335 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T012309.csv
+2026-02-27 01:23:11,363 - processor - INFO - Processing complete for raw/sensors_20260227T012309.csv. Summary written to processed/sensors_20260227T012309_summary.json
+2026-02-27 01:24:11,482 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012409.csv
+2026-02-27 01:24:11,483 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012409.csv
+2026-02-27 01:24:11,559 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T012409.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:24:11,635 - processor - INFO - Baseline updated for channel 'temperature': count=1400, mean=22.0184, std=1.9694
+2026-02-27 01:24:11,636 - processor - INFO - Baseline updated for channel 'humidity': count=1400, mean=54.6691, std=6.1658
+2026-02-27 01:24:11,636 - processor - INFO - Baseline updated for channel 'pressure': count=1400, mean=1012.9529, std=3.8975
+2026-02-27 01:24:11,636 - processor - INFO - Baseline updated for channel 'wind_speed': count=1400, mean=9.9926, std=3.1854
+2026-02-27 01:24:11,637 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:24:11,638 - detector - INFO - Z-score analysis for 'temperature': 1 values exceeded threshold (3.0)
+2026-02-27 01:24:11,640 - detector - INFO - Z-score analysis for 'humidity': 1 values exceeded threshold (3.0)
+2026-02-27 01:24:11,641 - detector - INFO - Z-score analysis for 'pressure': 2 values exceeded threshold (3.0)
+2026-02-27 01:24:11,642 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:24:11,798 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:24:11,800 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:24:11,858 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:24:11.829421
+2026-02-27 01:24:11,945 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:24:11,945 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T012409.csv
+2026-02-27 01:24:11,970 - processor - INFO - Processing complete for raw/sensors_20260227T012409.csv. Summary written to processed/sensors_20260227T012409_summary.json
+2026-02-27 01:25:11,011 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012510.csv
+2026-02-27 01:25:11,012 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012510.csv
+2026-02-27 01:25:11,086 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T012510.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:25:11,153 - processor - INFO - Baseline updated for channel 'temperature': count=1500, mean=22.0233, std=1.9621
+2026-02-27 01:25:11,153 - processor - INFO - Baseline updated for channel 'humidity': count=1500, mean=54.6355, std=6.2999
+2026-02-27 01:25:11,154 - processor - INFO - Baseline updated for channel 'pressure': count=1500, mean=1012.9254, std=3.8350
+2026-02-27 01:25:11,154 - processor - INFO - Baseline updated for channel 'wind_speed': count=1500, mean=10.0192, std=3.1421
+2026-02-27 01:25:11,154 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:25:11,156 - detector - INFO - Z-score analysis for 'temperature': 2 values exceeded threshold (3.0)
+2026-02-27 01:25:11,157 - detector - INFO - Z-score analysis for 'humidity': 3 values exceeded threshold (3.0)
+2026-02-27 01:25:11,158 - detector - INFO - Z-score analysis for 'pressure': 0 values exceeded threshold (3.0)
+2026-02-27 01:25:11,159 - detector - INFO - Z-score analysis for 'wind_speed': 0 values exceeded threshold (3.0)
+2026-02-27 01:25:11,316 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:25:11,318 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:25:11,378 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:25:11.350361
+2026-02-27 01:25:11,467 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:25:11,468 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T012510.csv
+2026-02-27 01:25:11,499 - processor - INFO - Processing complete for raw/sensors_20260227T012510.csv. Summary written to processed/sensors_20260227T012510_summary.json
+2026-02-27 01:26:11,379 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012610.csv
+2026-02-27 01:26:11,381 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T012610.csv
+2026-02-27 01:26:11,458 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T012610.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:26:11,545 - processor - INFO - Baseline updated for channel 'temperature': count=1600, mean=22.0230, std=1.9458
+2026-02-27 01:26:11,546 - processor - INFO - Baseline updated for channel 'humidity': count=1600, mean=54.6870, std=6.3347
+2026-02-27 01:26:11,546 - processor - INFO - Baseline updated for channel 'pressure': count=1600, mean=1012.9174, std=3.7928
+2026-02-27 01:26:11,547 - processor - INFO - Baseline updated for channel 'wind_speed': count=1600, mean=10.0576, std=3.2515
+2026-02-27 01:26:11,547 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:26:11,548 - detector - INFO - Z-score analysis for 'temperature': 1 values exceeded threshold (3.0)
+2026-02-27 01:26:11,550 - detector - INFO - Z-score analysis for 'humidity': 2 values exceeded threshold (3.0)
+2026-02-27 01:26:11,551 - detector - INFO - Z-score analysis for 'pressure': 0 values exceeded threshold (3.0)
+2026-02-27 01:26:11,552 - detector - INFO - Z-score analysis for 'wind_speed': 3 values exceeded threshold (3.0)
+2026-02-27 01:26:11,709 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:26:11,711 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:26:11,772 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:26:11.740624
+2026-02-27 01:26:11,797 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:26:11,798 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T012610.csv
+2026-02-27 01:26:11,827 - processor - INFO - Processing complete for raw/sensors_20260227T012610.csv. Summary written to processed/sensors_20260227T012610_summary.json
+2026-02-27 01:36:50,360 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T013546.csv
+2026-02-27 01:36:50,361 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T013546.csv
+2026-02-27 01:36:50,437 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T013546.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:36:50,543 - processor - INFO - Baseline updated for channel 'temperature': count=1700, mean=22.0418, std=1.9894
+2026-02-27 01:36:50,543 - processor - INFO - Baseline updated for channel 'humidity': count=1700, mean=54.7129, std=6.2740
+2026-02-27 01:36:50,543 - processor - INFO - Baseline updated for channel 'pressure': count=1700, mean=1012.9011, std=3.8136
+2026-02-27 01:36:50,544 - processor - INFO - Baseline updated for channel 'wind_speed': count=1700, mean=10.0805, std=3.2105
+2026-02-27 01:36:50,544 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:36:50,545 - detector - INFO - Z-score analysis for 'temperature': 3 values exceeded threshold (3.0)
+2026-02-27 01:36:50,547 - detector - INFO - Z-score analysis for 'humidity': 0 values exceeded threshold (3.0)
+2026-02-27 01:36:50,548 - detector - INFO - Z-score analysis for 'pressure': 2 values exceeded threshold (3.0)
+2026-02-27 01:36:50,549 - detector - INFO - Z-score analysis for 'wind_speed': 0 values exceeded threshold (3.0)
+2026-02-27 01:36:50,707 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:36:50,709 - detector - INFO - Consensus anomaly detection complete: 7/100 total anomalies flagged
+2026-02-27 01:36:50,766 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:36:50.738529
+2026-02-27 01:36:50,812 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:36:50,813 - processor - INFO - Anomalies detected: 7/100 rows flagged as anomalous in raw/sensors_20260227T013546.csv
+2026-02-27 01:36:50,841 - processor - INFO - Processing complete for raw/sensors_20260227T013546.csv. Summary written to processed/sensors_20260227T013546_summary.json
+2026-02-27 01:37:49,438 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T013748.csv
+2026-02-27 01:37:49,439 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T013748.csv
+2026-02-27 01:37:49,520 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T013748.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:37:49,591 - processor - INFO - Baseline updated for channel 'temperature': count=1800, mean=22.0457, std=1.9902
+2026-02-27 01:37:49,592 - processor - INFO - Baseline updated for channel 'humidity': count=1800, mean=54.7452, std=6.1824
+2026-02-27 01:37:49,592 - processor - INFO - Baseline updated for channel 'pressure': count=1800, mean=1012.9270, std=3.8956
+2026-02-27 01:37:49,592 - processor - INFO - Baseline updated for channel 'wind_speed': count=1800, mean=10.0692, std=3.1834
+2026-02-27 01:37:49,593 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:37:49,594 - detector - INFO - Z-score analysis for 'temperature': 2 values exceeded threshold (3.0)
+2026-02-27 01:37:49,595 - detector - INFO - Z-score analysis for 'humidity': 0 values exceeded threshold (3.0)
+2026-02-27 01:37:49,596 - detector - INFO - Z-score analysis for 'pressure': 3 values exceeded threshold (3.0)
+2026-02-27 01:37:49,597 - detector - INFO - Z-score analysis for 'wind_speed': 0 values exceeded threshold (3.0)
+2026-02-27 01:37:49,753 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:37:49,754 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:37:49,818 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:37:49.788297
+2026-02-27 01:37:49,852 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:37:49,853 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T013748.csv
+2026-02-27 01:37:49,883 - processor - INFO - Processing complete for raw/sensors_20260227T013748.csv. Summary written to processed/sensors_20260227T013748_summary.json
+2026-02-27 01:38:49,928 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T013848.csv
+2026-02-27 01:38:49,929 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T013848.csv
+2026-02-27 01:38:50,000 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T013848.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:38:50,076 - processor - INFO - Baseline updated for channel 'temperature': count=1900, mean=22.0430, std=1.9658
+2026-02-27 01:38:50,078 - processor - INFO - Baseline updated for channel 'humidity': count=1900, mean=54.7675, std=6.2133
+2026-02-27 01:38:50,079 - processor - INFO - Baseline updated for channel 'pressure': count=1900, mean=1012.9323, std=3.8749
+2026-02-27 01:38:50,080 - processor - INFO - Baseline updated for channel 'wind_speed': count=1900, mean=10.0628, std=3.1792
+2026-02-27 01:38:50,080 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:38:50,082 - detector - INFO - Z-score analysis for 'temperature': 0 values exceeded threshold (3.0)
+2026-02-27 01:38:50,083 - detector - INFO - Z-score analysis for 'humidity': 2 values exceeded threshold (3.0)
+2026-02-27 01:38:50,084 - detector - INFO - Z-score analysis for 'pressure': 1 values exceeded threshold (3.0)
+2026-02-27 01:38:50,085 - detector - INFO - Z-score analysis for 'wind_speed': 2 values exceeded threshold (3.0)
+2026-02-27 01:38:50,242 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:38:50,244 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:38:50,305 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:38:50.276729
+2026-02-27 01:38:50,337 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:38:50,337 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T013848.csv
+2026-02-27 01:38:50,368 - processor - INFO - Processing complete for raw/sensors_20260227T013848.csv. Summary written to processed/sensors_20260227T013848_summary.json
+2026-02-27 01:39:50,298 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T013948.csv
+2026-02-27 01:39:50,300 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T013948.csv
+2026-02-27 01:39:50,382 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T013948.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:39:50,455 - processor - INFO - Baseline updated for channel 'temperature': count=2000, mean=22.0447, std=1.9491
+2026-02-27 01:39:50,455 - processor - INFO - Baseline updated for channel 'humidity': count=2000, mean=54.8159, std=6.3033
+2026-02-27 01:39:50,456 - processor - INFO - Baseline updated for channel 'pressure': count=2000, mean=1012.9265, std=3.8469
+2026-02-27 01:39:50,456 - processor - INFO - Baseline updated for channel 'wind_speed': count=2000, mean=10.0498, std=3.1541
+2026-02-27 01:39:50,456 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:39:50,457 - detector - INFO - Z-score analysis for 'temperature': 1 values exceeded threshold (3.0)
+2026-02-27 01:39:50,458 - detector - INFO - Z-score analysis for 'humidity': 2 values exceeded threshold (3.0)
+2026-02-27 01:39:50,459 - detector - INFO - Z-score analysis for 'pressure': 1 values exceeded threshold (3.0)
+2026-02-27 01:39:50,460 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:39:50,615 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:39:50,617 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:39:50,677 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:39:50.648523
+2026-02-27 01:39:50,709 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:39:50,709 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T013948.csv
+2026-02-27 01:39:50,744 - processor - INFO - Processing complete for raw/sensors_20260227T013948.csv. Summary written to processed/sensors_20260227T013948_summary.json
+2026-02-27 01:40:50,892 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014049.csv
+2026-02-27 01:40:50,894 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014049.csv
+2026-02-27 01:40:50,998 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T014049.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:40:51,101 - processor - INFO - Baseline updated for channel 'temperature': count=2100, mean=22.0277, std=1.9483
+2026-02-27 01:40:51,102 - processor - INFO - Baseline updated for channel 'humidity': count=2100, mean=54.8118, std=6.6726
+2026-02-27 01:40:51,102 - processor - INFO - Baseline updated for channel 'pressure': count=2100, mean=1012.9278, std=3.8152
+2026-02-27 01:40:51,102 - processor - INFO - Baseline updated for channel 'wind_speed': count=2100, mean=10.0678, std=3.1410
+2026-02-27 01:40:51,103 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:40:51,104 - detector - INFO - Z-score analysis for 'temperature': 1 values exceeded threshold (3.0)
+2026-02-27 01:40:51,106 - detector - INFO - Z-score analysis for 'humidity': 4 values exceeded threshold (3.0)
+2026-02-27 01:40:51,107 - detector - INFO - Z-score analysis for 'pressure': 0 values exceeded threshold (3.0)
+2026-02-27 01:40:51,108 - detector - INFO - Z-score analysis for 'wind_speed': 0 values exceeded threshold (3.0)
+2026-02-27 01:40:51,271 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:40:51,273 - detector - INFO - Consensus anomaly detection complete: 8/100 total anomalies flagged
+2026-02-27 01:40:51,376 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:40:51.316316
+2026-02-27 01:40:51,420 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:40:51,421 - processor - INFO - Anomalies detected: 8/100 rows flagged as anomalous in raw/sensors_20260227T014049.csv
+2026-02-27 01:40:51,452 - processor - INFO - Processing complete for raw/sensors_20260227T014049.csv. Summary written to processed/sensors_20260227T014049_summary.json
+2026-02-27 01:41:51,301 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014149.csv
+2026-02-27 01:41:51,303 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014149.csv
+2026-02-27 01:41:51,383 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T014149.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:41:51,455 - processor - INFO - Baseline updated for channel 'temperature': count=2200, mean=22.0124, std=1.9327
+2026-02-27 01:41:51,456 - processor - INFO - Baseline updated for channel 'humidity': count=2200, mean=54.7618, std=6.7021
+2026-02-27 01:41:51,456 - processor - INFO - Baseline updated for channel 'pressure': count=2200, mean=1012.9161, std=3.7822
+2026-02-27 01:41:51,457 - processor - INFO - Baseline updated for channel 'wind_speed': count=2200, mean=10.0477, std=3.1626
+2026-02-27 01:41:51,457 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:41:51,458 - detector - INFO - Z-score analysis for 'temperature': 0 values exceeded threshold (3.0)
+2026-02-27 01:41:51,460 - detector - INFO - Z-score analysis for 'humidity': 2 values exceeded threshold (3.0)
+2026-02-27 01:41:51,461 - detector - INFO - Z-score analysis for 'pressure': 1 values exceeded threshold (3.0)
+2026-02-27 01:41:51,462 - detector - INFO - Z-score analysis for 'wind_speed': 2 values exceeded threshold (3.0)
+2026-02-27 01:41:51,618 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:41:51,620 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:41:51,681 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:41:51.656058
+2026-02-27 01:41:51,712 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:41:51,713 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T014149.csv
+2026-02-27 01:41:51,739 - processor - INFO - Processing complete for raw/sensors_20260227T014149.csv. Summary written to processed/sensors_20260227T014149_summary.json
+2026-02-27 01:42:50,924 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014249.csv
+2026-02-27 01:42:50,925 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014249.csv
+2026-02-27 01:42:51,002 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T014249.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:42:51,098 - processor - INFO - Baseline updated for channel 'temperature': count=2300, mean=22.0155, std=1.9313
+2026-02-27 01:42:51,098 - processor - INFO - Baseline updated for channel 'humidity': count=2300, mean=54.8092, std=6.6916
+2026-02-27 01:42:51,098 - processor - INFO - Baseline updated for channel 'pressure': count=2300, mean=1012.9295, std=3.7475
+2026-02-27 01:42:51,099 - processor - INFO - Baseline updated for channel 'wind_speed': count=2300, mean=10.0524, std=3.1661
+2026-02-27 01:42:51,099 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:42:51,100 - detector - INFO - Z-score analysis for 'temperature': 2 values exceeded threshold (3.0)
+2026-02-27 01:42:51,101 - detector - INFO - Z-score analysis for 'humidity': 2 values exceeded threshold (3.0)
+2026-02-27 01:42:51,102 - detector - INFO - Z-score analysis for 'pressure': 0 values exceeded threshold (3.0)
+2026-02-27 01:42:51,103 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:42:51,260 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:42:51,262 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:42:51,352 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:42:51.299429
+2026-02-27 01:42:51,381 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:42:51,381 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T014249.csv
+2026-02-27 01:42:51,416 - processor - INFO - Processing complete for raw/sensors_20260227T014249.csv. Summary written to processed/sensors_20260227T014249_summary.json
+2026-02-27 01:43:51,313 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014349.csv
+2026-02-27 01:43:51,314 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014349.csv
+2026-02-27 01:43:51,398 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T014349.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:43:51,495 - processor - INFO - Baseline updated for channel 'temperature': count=2400, mean=22.0258, std=1.9528
+2026-02-27 01:43:51,495 - processor - INFO - Baseline updated for channel 'humidity': count=2400, mean=54.8259, std=6.6604
+2026-02-27 01:43:51,496 - processor - INFO - Baseline updated for channel 'pressure': count=2400, mean=1012.9284, std=3.7139
+2026-02-27 01:43:51,496 - processor - INFO - Baseline updated for channel 'wind_speed': count=2400, mean=10.0617, std=3.1637
+2026-02-27 01:43:51,496 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:43:51,497 - detector - INFO - Z-score analysis for 'temperature': 3 values exceeded threshold (3.0)
+2026-02-27 01:43:51,498 - detector - INFO - Z-score analysis for 'humidity': 1 values exceeded threshold (3.0)
+2026-02-27 01:43:51,499 - detector - INFO - Z-score analysis for 'pressure': 0 values exceeded threshold (3.0)
+2026-02-27 01:43:51,500 - detector - INFO - Z-score analysis for 'wind_speed': 1 values exceeded threshold (3.0)
+2026-02-27 01:43:51,656 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:43:51,657 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:43:51,735 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:43:51.687285
+2026-02-27 01:43:51,765 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:43:51,766 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T014349.csv
+2026-02-27 01:43:51,796 - processor - INFO - Processing complete for raw/sensors_20260227T014349.csv. Summary written to processed/sensors_20260227T014349_summary.json
+2026-02-27 01:44:51,737 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014449.csv
+2026-02-27 01:44:51,738 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014449.csv
+2026-02-27 01:44:51,814 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T014449.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:44:51,907 - processor - INFO - Baseline updated for channel 'temperature': count=2500, mean=22.0232, std=1.9366
+2026-02-27 01:44:51,908 - processor - INFO - Baseline updated for channel 'humidity': count=2500, mean=54.8132, std=6.5961
+2026-02-27 01:44:51,908 - processor - INFO - Baseline updated for channel 'pressure': count=2500, mean=1012.9647, std=3.7282
+2026-02-27 01:44:51,908 - processor - INFO - Baseline updated for channel 'wind_speed': count=2500, mean=10.0696, std=3.2131
+2026-02-27 01:44:51,908 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:44:51,909 - detector - INFO - Z-score analysis for 'temperature': 0 values exceeded threshold (3.0)
+2026-02-27 01:44:51,910 - detector - INFO - Z-score analysis for 'humidity': 0 values exceeded threshold (3.0)
+2026-02-27 01:44:51,911 - detector - INFO - Z-score analysis for 'pressure': 2 values exceeded threshold (3.0)
+2026-02-27 01:44:51,912 - detector - INFO - Z-score analysis for 'wind_speed': 3 values exceeded threshold (3.0)
+2026-02-27 01:44:52,069 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:44:52,071 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:44:52,210 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:44:52.142985
+2026-02-27 01:44:52,255 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:44:52,256 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T014449.csv
+2026-02-27 01:44:52,280 - processor - INFO - Processing complete for raw/sensors_20260227T014449.csv. Summary written to processed/sensors_20260227T014449_summary.json
+2026-02-27 01:45:52,118 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014550.csv
+2026-02-27 01:45:52,119 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014550.csv
+2026-02-27 01:45:52,197 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T014550.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:45:52,273 - processor - INFO - Baseline updated for channel 'temperature': count=2600, mean=22.0255, std=1.9187
+2026-02-27 01:45:52,273 - processor - INFO - Baseline updated for channel 'humidity': count=2600, mean=54.8420, std=6.7430
+2026-02-27 01:45:52,274 - processor - INFO - Baseline updated for channel 'pressure': count=2600, mean=1012.9679, std=3.7218
+2026-02-27 01:45:52,274 - processor - INFO - Baseline updated for channel 'wind_speed': count=2600, mean=10.0755, std=3.1867
+2026-02-27 01:45:52,274 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:45:52,276 - detector - INFO - Z-score analysis for 'temperature': 0 values exceeded threshold (3.0)
+2026-02-27 01:45:52,277 - detector - INFO - Z-score analysis for 'humidity': 4 values exceeded threshold (3.0)
+2026-02-27 01:45:52,278 - detector - INFO - Z-score analysis for 'pressure': 1 values exceeded threshold (3.0)
+2026-02-27 01:45:52,279 - detector - INFO - Z-score analysis for 'wind_speed': 0 values exceeded threshold (3.0)
+2026-02-27 01:45:52,443 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:45:52,445 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:45:52,516 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:45:52.482533
+2026-02-27 01:45:52,546 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:45:52,546 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T014550.csv
+2026-02-27 01:45:52,581 - processor - INFO - Processing complete for raw/sensors_20260227T014550.csv. Summary written to processed/sensors_20260227T014550_summary.json
+2026-02-27 01:46:51,798 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014650.csv
+2026-02-27 01:46:51,799 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014650.csv
+2026-02-27 01:46:51,870 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T014650.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:46:51,961 - processor - INFO - Baseline updated for channel 'temperature': count=2700, mean=22.0294, std=1.9037
+2026-02-27 01:46:51,962 - processor - INFO - Baseline updated for channel 'humidity': count=2700, mean=54.8056, std=6.7722
+2026-02-27 01:46:51,962 - processor - INFO - Baseline updated for channel 'pressure': count=2700, mean=1012.9918, std=3.7630
+2026-02-27 01:46:51,962 - processor - INFO - Baseline updated for channel 'wind_speed': count=2700, mean=10.0719, std=3.1642
+2026-02-27 01:46:51,963 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:46:51,964 - detector - INFO - Z-score analysis for 'temperature': 0 values exceeded threshold (3.0)
+2026-02-27 01:46:51,965 - detector - INFO - Z-score analysis for 'humidity': 2 values exceeded threshold (3.0)
+2026-02-27 01:46:51,966 - detector - INFO - Z-score analysis for 'pressure': 3 values exceeded threshold (3.0)
+2026-02-27 01:46:51,967 - detector - INFO - Z-score analysis for 'wind_speed': 0 values exceeded threshold (3.0)
+2026-02-27 01:46:52,122 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:46:52,124 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:46:52,203 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:46:52.174800
+2026-02-27 01:46:52,236 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:46:52,237 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T014650.csv
+2026-02-27 01:46:52,267 - processor - INFO - Processing complete for raw/sensors_20260227T014650.csv. Summary written to processed/sensors_20260227T014650_summary.json
+2026-02-27 01:47:52,163 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014750.csv
+2026-02-27 01:47:52,164 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014750.csv
+2026-02-27 01:47:52,242 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T014750.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:47:52,329 - processor - INFO - Baseline updated for channel 'temperature': count=2800, mean=22.0261, std=1.8939
+2026-02-27 01:47:52,329 - processor - INFO - Baseline updated for channel 'humidity': count=2800, mean=54.8013, std=6.8116
+2026-02-27 01:47:52,330 - processor - INFO - Baseline updated for channel 'pressure': count=2800, mean=1013.0039, std=3.7884
+2026-02-27 01:47:52,330 - processor - INFO - Baseline updated for channel 'wind_speed': count=2800, mean=10.0661, std=3.1427
+2026-02-27 01:47:52,330 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:47:52,332 - detector - INFO - Z-score analysis for 'temperature': 1 values exceeded threshold (3.0)
+2026-02-27 01:47:52,333 - detector - INFO - Z-score analysis for 'humidity': 2 values exceeded threshold (3.0)
+2026-02-27 01:47:52,334 - detector - INFO - Z-score analysis for 'pressure': 2 values exceeded threshold (3.0)
+2026-02-27 01:47:52,335 - detector - INFO - Z-score analysis for 'wind_speed': 0 values exceeded threshold (3.0)
+2026-02-27 01:47:52,516 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:47:52,518 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:47:52,578 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:47:52.551298
+2026-02-27 01:47:52,613 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:47:52,614 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T014750.csv
+2026-02-27 01:47:52,640 - processor - INFO - Processing complete for raw/sensors_20260227T014750.csv. Summary written to processed/sensors_20260227T014750_summary.json
+2026-02-27 01:48:52,673 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014850.csv
+2026-02-27 01:48:52,675 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014850.csv
+2026-02-27 01:48:52,760 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T014850.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:48:52,830 - processor - INFO - Baseline updated for channel 'temperature': count=2900, mean=22.0222, std=1.9003
+2026-02-27 01:48:52,830 - processor - INFO - Baseline updated for channel 'humidity': count=2900, mean=54.7957, std=6.7764
+2026-02-27 01:48:52,831 - processor - INFO - Baseline updated for channel 'pressure': count=2900, mean=1013.0060, std=3.7558
+2026-02-27 01:48:52,831 - processor - INFO - Baseline updated for channel 'wind_speed': count=2900, mean=10.0549, std=3.1576
+2026-02-27 01:48:52,831 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:48:52,832 - detector - INFO - Z-score analysis for 'temperature': 2 values exceeded threshold (3.0)
+2026-02-27 01:48:52,833 - detector - INFO - Z-score analysis for 'humidity': 1 values exceeded threshold (3.0)
+2026-02-27 01:48:52,834 - detector - INFO - Z-score analysis for 'pressure': 0 values exceeded threshold (3.0)
+2026-02-27 01:48:52,835 - detector - INFO - Z-score analysis for 'wind_speed': 2 values exceeded threshold (3.0)
+2026-02-27 01:48:52,994 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:48:52,996 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:48:53,056 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:48:53.029970
+2026-02-27 01:48:53,089 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:48:53,089 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T014850.csv
+2026-02-27 01:48:53,114 - processor - INFO - Processing complete for raw/sensors_20260227T014850.csv. Summary written to processed/sensors_20260227T014850_summary.json
+2026-02-27 01:49:53,016 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014951.csv
+2026-02-27 01:49:53,017 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T014951.csv
+2026-02-27 01:49:53,090 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T014951.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:49:53,195 - processor - INFO - Baseline updated for channel 'temperature': count=3000, mean=22.0233, std=1.8919
+2026-02-27 01:49:53,196 - processor - INFO - Baseline updated for channel 'humidity': count=3000, mean=54.8066, std=6.7160
+2026-02-27 01:49:53,196 - processor - INFO - Baseline updated for channel 'pressure': count=3000, mean=1013.0064, std=3.7862
+2026-02-27 01:49:53,196 - processor - INFO - Baseline updated for channel 'wind_speed': count=3000, mean=10.0748, std=3.1702
+2026-02-27 01:49:53,197 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:49:53,198 - detector - INFO - Z-score analysis for 'temperature': 1 values exceeded threshold (3.0)
+2026-02-27 01:49:53,199 - detector - INFO - Z-score analysis for 'humidity': 0 values exceeded threshold (3.0)
+2026-02-27 01:49:53,200 - detector - INFO - Z-score analysis for 'pressure': 2 values exceeded threshold (3.0)
+2026-02-27 01:49:53,201 - detector - INFO - Z-score analysis for 'wind_speed': 2 values exceeded threshold (3.0)
+2026-02-27 01:49:53,360 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:49:53,362 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:49:53,428 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:49:53.398657
+2026-02-27 01:49:53,461 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:49:53,461 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T014951.csv
+2026-02-27 01:49:53,489 - processor - INFO - Processing complete for raw/sensors_20260227T014951.csv. Summary written to processed/sensors_20260227T014951_summary.json
+2026-02-27 01:50:52,907 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015051.csv
+2026-02-27 01:50:52,908 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015051.csv
+2026-02-27 01:50:52,984 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T015051.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:50:53,068 - processor - INFO - Baseline updated for channel 'temperature': count=3100, mean=22.0229, std=1.8875
+2026-02-27 01:50:53,069 - processor - INFO - Baseline updated for channel 'humidity': count=3100, mean=54.8179, std=6.6837
+2026-02-27 01:50:53,069 - processor - INFO - Baseline updated for channel 'pressure': count=3100, mean=1013.0189, std=3.7940
+2026-02-27 01:50:53,070 - processor - INFO - Baseline updated for channel 'wind_speed': count=3100, mean=10.0853, std=3.1809
+2026-02-27 01:50:53,070 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:50:53,071 - detector - INFO - Z-score analysis for 'temperature': 1 values exceeded threshold (3.0)
+2026-02-27 01:50:53,072 - detector - INFO - Z-score analysis for 'humidity': 1 values exceeded threshold (3.0)
+2026-02-27 01:50:53,073 - detector - INFO - Z-score analysis for 'pressure': 1 values exceeded threshold (3.0)
+2026-02-27 01:50:53,074 - detector - INFO - Z-score analysis for 'wind_speed': 2 values exceeded threshold (3.0)
+2026-02-27 01:50:53,229 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:50:53,231 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:50:53,307 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:50:53.265281
+2026-02-27 01:50:53,339 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:50:53,339 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T015051.csv
+2026-02-27 01:50:53,368 - processor - INFO - Processing complete for raw/sensors_20260227T015051.csv. Summary written to processed/sensors_20260227T015051_summary.json
+2026-02-27 01:51:53,263 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015151.csv
+2026-02-27 01:51:53,264 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015151.csv
+2026-02-27 01:51:53,336 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T015151.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:51:53,409 - processor - INFO - Baseline updated for channel 'temperature': count=3200, mean=22.0214, std=1.8891
+2026-02-27 01:51:53,409 - processor - INFO - Baseline updated for channel 'humidity': count=3200, mean=54.8073, std=6.7032
+2026-02-27 01:51:53,410 - processor - INFO - Baseline updated for channel 'pressure': count=3200, mean=1013.0131, std=3.7887
+2026-02-27 01:51:53,410 - processor - INFO - Baseline updated for channel 'wind_speed': count=3200, mean=10.0783, std=3.1646
+2026-02-27 01:51:53,410 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:51:53,411 - detector - INFO - Z-score analysis for 'temperature': 2 values exceeded threshold (3.0)
+2026-02-27 01:51:53,412 - detector - INFO - Z-score analysis for 'humidity': 2 values exceeded threshold (3.0)
+2026-02-27 01:51:53,413 - detector - INFO - Z-score analysis for 'pressure': 1 values exceeded threshold (3.0)
+2026-02-27 01:51:53,414 - detector - INFO - Z-score analysis for 'wind_speed': 0 values exceeded threshold (3.0)
+2026-02-27 01:51:53,570 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:51:53,572 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:51:53,634 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:51:53.604499
+2026-02-27 01:51:53,693 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:51:53,693 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T015151.csv
+2026-02-27 01:51:53,751 - processor - INFO - Processing complete for raw/sensors_20260227T015151.csv. Summary written to processed/sensors_20260227T015151_summary.json
+2026-02-27 01:52:53,540 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015251.csv
+2026-02-27 01:52:53,543 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015251.csv
+2026-02-27 01:52:53,618 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T015251.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:52:53,718 - processor - INFO - Baseline updated for channel 'temperature': count=3300, mean=22.0420, std=1.9140
+2026-02-27 01:52:53,719 - processor - INFO - Baseline updated for channel 'humidity': count=3300, mean=54.8121, std=6.6668
+2026-02-27 01:52:53,719 - processor - INFO - Baseline updated for channel 'pressure': count=3300, mean=1012.9940, std=3.8143
+2026-02-27 01:52:53,719 - processor - INFO - Baseline updated for channel 'wind_speed': count=3300, mean=10.0820, std=3.1407
+2026-02-27 01:52:53,720 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:52:53,721 - detector - INFO - Z-score analysis for 'temperature': 2 values exceeded threshold (3.0)
+2026-02-27 01:52:53,722 - detector - INFO - Z-score analysis for 'humidity': 1 values exceeded threshold (3.0)
+2026-02-27 01:52:53,723 - detector - INFO - Z-score analysis for 'pressure': 2 values exceeded threshold (3.0)
+2026-02-27 01:52:53,724 - detector - INFO - Z-score analysis for 'wind_speed': 0 values exceeded threshold (3.0)
+2026-02-27 01:52:53,883 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:52:53,885 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:52:53,943 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:52:53.913248
+2026-02-27 01:52:53,987 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:52:53,987 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T015251.csv
+2026-02-27 01:52:54,015 - processor - INFO - Processing complete for raw/sensors_20260227T015251.csv. Summary written to processed/sensors_20260227T015251_summary.json
+2026-02-27 01:53:53,079 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015351.csv
+2026-02-27 01:53:53,081 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015351.csv
+2026-02-27 01:53:53,159 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T015351.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:53:53,235 - processor - INFO - Baseline updated for channel 'temperature': count=3400, mean=22.0389, std=1.9064
+2026-02-27 01:53:53,236 - processor - INFO - Baseline updated for channel 'humidity': count=3400, mean=54.8233, std=6.6184
+2026-02-27 01:53:53,236 - processor - INFO - Baseline updated for channel 'pressure': count=3400, mean=1013.0122, std=3.8284
+2026-02-27 01:53:53,237 - processor - INFO - Baseline updated for channel 'wind_speed': count=3400, mean=10.0895, std=3.1593
+2026-02-27 01:53:53,237 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:53:53,238 - detector - INFO - Z-score analysis for 'temperature': 1 values exceeded threshold (3.0)
+2026-02-27 01:53:53,239 - detector - INFO - Z-score analysis for 'humidity': 0 values exceeded threshold (3.0)
+2026-02-27 01:53:53,240 - detector - INFO - Z-score analysis for 'pressure': 2 values exceeded threshold (3.0)
+2026-02-27 01:53:53,241 - detector - INFO - Z-score analysis for 'wind_speed': 2 values exceeded threshold (3.0)
+2026-02-27 01:53:53,401 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:53:53,403 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:53:53,508 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:53:53.479142
+2026-02-27 01:53:53,547 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:53:53,548 - processor - INFO - Anomalies detected: 5/100 rows flagged as anomalous in raw/sensors_20260227T015351.csv
+2026-02-27 01:53:53,578 - processor - INFO - Processing complete for raw/sensors_20260227T015351.csv. Summary written to processed/sensors_20260227T015351_summary.json
+2026-02-27 01:54:53,609 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015452.csv
+2026-02-27 01:54:53,610 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015452.csv
+2026-02-27 01:54:53,681 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T015452.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:54:53,786 - processor - INFO - Baseline updated for channel 'temperature': count=3500, mean=22.0500, std=1.9127
+2026-02-27 01:54:53,786 - processor - INFO - Baseline updated for channel 'humidity': count=3500, mean=54.8046, std=6.5865
+2026-02-27 01:54:53,787 - processor - INFO - Baseline updated for channel 'pressure': count=3500, mean=1013.0017, std=3.8361
+2026-02-27 01:54:53,787 - processor - INFO - Baseline updated for channel 'wind_speed': count=3500, mean=10.0779, std=3.1757
+2026-02-27 01:54:53,787 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:54:53,788 - detector - INFO - Z-score analysis for 'temperature': 2 values exceeded threshold (3.0)
+2026-02-27 01:54:53,789 - detector - INFO - Z-score analysis for 'humidity': 0 values exceeded threshold (3.0)
+2026-02-27 01:54:53,790 - detector - INFO - Z-score analysis for 'pressure': 1 values exceeded threshold (3.0)
+2026-02-27 01:54:53,791 - detector - INFO - Z-score analysis for 'wind_speed': 2 values exceeded threshold (3.0)
+2026-02-27 01:54:53,948 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:54:53,950 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:54:54,016 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:54:53.984246
+2026-02-27 01:54:54,092 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:54:54,092 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T015452.csv
+2026-02-27 01:54:54,118 - processor - INFO - Processing complete for raw/sensors_20260227T015452.csv. Summary written to processed/sensors_20260227T015452_summary.json
+2026-02-27 01:55:54,000 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015552.csv
+2026-02-27 01:55:54,001 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015552.csv
+2026-02-27 01:55:54,075 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T015552.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:55:54,145 - processor - INFO - Baseline updated for channel 'temperature': count=3600, mean=22.0446, std=1.9259
+2026-02-27 01:55:54,146 - processor - INFO - Baseline updated for channel 'humidity': count=3600, mean=54.7900, std=6.6046
+2026-02-27 01:55:54,146 - processor - INFO - Baseline updated for channel 'pressure': count=3600, mean=1012.9998, std=3.8401
+2026-02-27 01:55:54,146 - processor - INFO - Baseline updated for channel 'wind_speed': count=3600, mean=10.0743, std=3.1560
+2026-02-27 01:55:54,147 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:55:54,148 - detector - INFO - Z-score analysis for 'temperature': 2 values exceeded threshold (3.0)
+2026-02-27 01:55:54,149 - detector - INFO - Z-score analysis for 'humidity': 2 values exceeded threshold (3.0)
+2026-02-27 01:55:54,150 - detector - INFO - Z-score analysis for 'pressure': 1 values exceeded threshold (3.0)
+2026-02-27 01:55:54,151 - detector - INFO - Z-score analysis for 'wind_speed': 0 values exceeded threshold (3.0)
+2026-02-27 01:55:54,306 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:55:54,308 - detector - INFO - Consensus anomaly detection complete: 6/100 total anomalies flagged
+2026-02-27 01:55:54,362 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:55:54.336782
+2026-02-27 01:55:54,395 - processor - INFO - Log file uploaded to s3://vpn7n-ds5220-dp1/logs/provision.log
+2026-02-27 01:55:54,396 - processor - INFO - Anomalies detected: 6/100 rows flagged as anomalous in raw/sensors_20260227T015552.csv
+2026-02-27 01:55:54,419 - processor - INFO - Processing complete for raw/sensors_20260227T015552.csv. Summary written to processed/sensors_20260227T015552_summary.json
+2026-02-27 01:56:54,467 - app - INFO - New file arrived: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015652.csv
+2026-02-27 01:56:54,468 - processor - INFO - Processing new file: s3://vpn7n-ds5220-dp1/raw/sensors_20260227T015652.csv
+2026-02-27 01:56:54,548 - processor - INFO - Loaded 100 rows from raw/sensors_20260227T015652.csv. Columns: ['timestamp', 'temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:56:54,628 - processor - INFO - Baseline updated for channel 'temperature': count=3700, mean=22.0426, std=1.9310
+2026-02-27 01:56:54,628 - processor - INFO - Baseline updated for channel 'humidity': count=3700, mean=54.7947, std=6.5546
+2026-02-27 01:56:54,628 - processor - INFO - Baseline updated for channel 'pressure': count=3700, mean=1013.0087, std=3.8171
+2026-02-27 01:56:54,629 - processor - INFO - Baseline updated for channel 'wind_speed': count=3700, mean=10.0642, std=3.2052
+2026-02-27 01:56:54,629 - detector - INFO - Running anomaly detection (method='both') on 100 rows across channels: ['temperature', 'humidity', 'pressure', 'wind_speed']
+2026-02-27 01:56:54,630 - detector - INFO - Z-score analysis for 'temperature': 2 values exceeded threshold (3.0)
+2026-02-27 01:56:54,631 - detector - INFO - Z-score analysis for 'humidity': 0 values exceeded threshold (3.0)
+2026-02-27 01:56:54,632 - detector - INFO - Z-score analysis for 'pressure': 0 values exceeded threshold (3.0)
+2026-02-27 01:56:54,633 - detector - INFO - Z-score analysis for 'wind_speed': 3 values exceeded threshold (3.0)
+2026-02-27 01:56:54,790 - detector - INFO - Isolation Forest analysis: 5/100 rows flagged as anomalous
+2026-02-27 01:56:54,792 - detector - INFO - Consensus anomaly detection complete: 5/100 total anomalies flagged
+2026-02-27 01:56:54,850 - baseline - INFO - Baseline JSON file updated and saved to s3://vpn7n-ds5220-dp1/state/baseline.json. Channels: ['temperature', 'humidity', 'pressure', 'wind_speed']. Last updated: 2026-02-27T01:56:54.825950
